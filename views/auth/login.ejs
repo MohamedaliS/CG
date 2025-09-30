@@ -1,0 +1,75 @@
+<div class="min-h-screen flex items-center justify-center bg-gray-50 py-12 px-4 sm:px-6 lg:px-8">
+    <div class="max-w-md w-full space-y-8">
+        <div>
+            <h2 class="mt-6 text-center text-3xl font-extrabold text-gray-900">
+                Sign in to your account
+            </h2>
+            <p class="mt-2 text-center text-sm text-gray-600">
+                Or
+                <a href="/register" class="font-medium text-blue-600 hover:text-blue-500">
+                    create a new account
+                </a>
+            </p>
+        </div>
+        
+        <form id="login-form" hx-post="/api/auth/login" hx-trigger="submit" hx-target="#login-result" class="mt-8 space-y-6">
+            <div class="rounded-md shadow-sm -space-y-px">
+                <div>
+                    <label for="email" class="sr-only">Email address</label>
+                    <input id="email" name="email" type="email" required 
+                           class="relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-t-md focus:outline-none focus:ring-blue-500 focus:border-blue-500 focus:z-10 sm:text-sm" 
+                           placeholder="Email address">
+                </div>
+                <div>
+                    <label for="password" class="sr-only">Password</label>
+                    <input id="password" name="password" type="password" required 
+                           class="relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-b-md focus:outline-none focus:ring-blue-500 focus:border-blue-500 focus:z-10 sm:text-sm" 
+                           placeholder="Password">
+                </div>
+            </div>
+
+            <div id="login-result" class="text-center"></div>
+
+            <div>
+                <button type="submit" 
+                        class="group relative w-full flex justify-center py-2 px-4 border border-transparent text-sm font-medium rounded-md text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500">
+                    <span class="loading-spinner"></span>
+                    Sign in
+                </button>
+            </div>
+        </form>
+
+        <div class="text-center">
+            <a href="/verify" class="text-sm text-blue-600 hover:text-blue-500">
+                Verify a certificate
+            </a>
+        </div>
+    </div>
+</div>
+
+<script>
+    document.addEventListener('htmx:afterRequest', function(event) {
+        if (event.detail.target.id === 'login-result') {
+            const xhr = event.detail.xhr;
+            const response = JSON.parse(xhr.responseText);
+            
+            if (xhr.status === 200 && response.success) {
+                // Store JWT token
+                localStorage.setItem('auth_token', response.data.token);
+                
+                // Show success message
+                document.getElementById('login-result').innerHTML = 
+                    '<div class="text-green-600 text-sm">Login successful! Redirecting...</div>';
+                
+                // Redirect to dashboard
+                setTimeout(() => {
+                    window.location.href = '/dashboard';
+                }, 1000);
+            } else {
+                // Show error message
+                document.getElementById('login-result').innerHTML = 
+                    `<div class="text-red-600 text-sm">${response.message || 'Login failed'}</div>`;
+            }
+        }
+    });
+</script>

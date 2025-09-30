@@ -1,0 +1,138 @@
+<div class="max-w-7xl mx-auto py-6 sm:px-6 lg:px-8">
+    <div class="bg-white shadow rounded-lg">
+        <div class="px-4 py-5 sm:p-6">
+            <h1 class="text-2xl font-bold text-gray-900 mb-6">Certificate Verification</h1>
+            
+            <% if (certificateId && valid !== null) { %>
+                <!-- Verification Result -->
+                <div class="verification-result <%= valid ? 'valid' : 'invalid' %>">
+                    <div class="flex items-start">
+                        <div class="flex-shrink-0">
+                            <% if (valid) { %>
+                                <svg class="h-8 w-8 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+                                </svg>
+                            <% } else { %>
+                                <svg class="h-8 w-8 text-red-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2m7-2a9 9 0 11-18 0 9 9 0 0118 0z" />
+                                </svg>
+                            <% } %>
+                        </div>
+                        <div class="ml-3 flex-1">
+                            <h3 class="text-lg font-medium <%= valid ? 'text-green-800' : 'text-red-800' %>">
+                                <%= valid ? 'Certificate Verified' : 'Certificate Invalid' %>
+                            </h3>
+                            <p class="mt-1 text-sm <%= valid ? 'text-green-700' : 'text-red-700' %>">
+                                <%= message %>
+                            </p>
+                            
+                            <% if (valid && certificate) { %>
+                                <div class="mt-4 grid grid-cols-1 sm:grid-cols-2 gap-4">
+                                    <div>
+                                        <dt class="text-sm font-medium text-gray-500">Participant</dt>
+                                        <dd class="mt-1 text-sm text-gray-900"><%= certificate.participantName %></dd>
+                                    </div>
+                                    <div>
+                                        <dt class="text-sm font-medium text-gray-500">Event</dt>
+                                        <dd class="mt-1 text-sm text-gray-900"><%= certificate.eventName %></dd>
+                                    </div>
+                                    <div>
+                                        <dt class="text-sm font-medium text-gray-500">Organization</dt>
+                                        <dd class="mt-1 text-sm text-gray-900"><%= certificate.organizationName %></dd>
+                                    </div>
+                                    <div>
+                                        <dt class="text-sm font-medium text-gray-500">Issued Date</dt>
+                                        <dd class="mt-1 text-sm text-gray-900"><%= certificate.generatedDate %></dd>
+                                    </div>
+                                    <div class="sm:col-span-2">
+                                        <dt class="text-sm font-medium text-gray-500">Certificate ID</dt>
+                                        <dd class="mt-1 text-sm text-gray-900 font-mono"><%= certificate.certificateId %></dd>
+                                    </div>
+                                </div>
+                            <% } %>
+                            
+                            <% if (verificationDate) { %>
+                                <p class="mt-4 text-xs text-gray-500">
+                                    Verified on <%= verificationDate %>
+                                </p>
+                            <% } %>
+                        </div>
+                    </div>
+                </div>
+            <% } %>
+
+            <!-- Verification Form -->
+            <div class="mt-6">
+                <form hx-get="/verify" hx-trigger="submit" hx-target="body" hx-push-url="true" class="space-y-4">
+                    <div>
+                        <label for="certificate-id" class="block text-sm font-medium text-gray-700">
+                            Certificate ID
+                        </label>
+                        <div class="mt-1 flex rounded-md shadow-sm">
+                            <input type="text" 
+                                   name="certificateId" 
+                                   id="certificate-id" 
+                                   value="<%= certificateId || '' %>"
+                                   placeholder="Enter certificate ID (e.g., 123e4567-e89b-12d3-a456-426614174000)"
+                                   class="flex-1 block w-full rounded-l-md border-gray-300 focus:ring-blue-500 focus:border-blue-500 sm:text-sm">
+                            <button type="submit" 
+                                    class="inline-flex items-center px-4 py-2 border border-l-0 border-gray-300 rounded-r-md bg-gray-50 text-gray-500 text-sm hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500">
+                                <span class="loading-spinner"></span>
+                                Verify
+                            </button>
+                        </div>
+                        <p class="mt-2 text-sm text-gray-500">
+                            Enter the unique certificate ID to verify its authenticity.
+                        </p>
+                    </div>
+                </form>
+            </div>
+
+            <!-- QR Code Scanner (optional enhancement) -->
+            <div class="mt-8 p-4 bg-gray-50 rounded-lg">
+                <h4 class="text-sm font-medium text-gray-900 mb-2">How to verify a certificate:</h4>
+                <ol class="text-sm text-gray-600 space-y-1">
+                    <li>1. Locate the QR code on the certificate</li>
+                    <li>2. Scan the QR code with your phone camera, or</li>
+                    <li>3. Copy the certificate ID from the certificate and paste it above</li>
+                </ol>
+            </div>
+
+            <!-- API Information -->
+            <div class="mt-8 border-t border-gray-200 pt-6">
+                <h4 class="text-sm font-medium text-gray-900 mb-3">API Access</h4>
+                <p class="text-sm text-gray-600 mb-4">
+                    Developers can verify certificates programmatically using our API:
+                </p>
+                <div class="bg-gray-800 text-gray-100 p-4 rounded-lg text-sm font-mono overflow-x-auto">
+                    <div class="text-green-400">GET</div>
+                    <div class="mt-1"><%= locals.domain || 'https://yourdomain.com' %>/api/verify/{certificate-id}</div>
+                </div>
+                <p class="mt-2 text-xs text-gray-500">
+                    Returns JSON with verification status and certificate details.
+                </p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    // Auto-focus the certificate ID input
+    document.addEventListener('DOMContentLoaded', function() {
+        const input = document.getElementById('certificate-id');
+        if (input && !input.value) {
+            input.focus();
+        }
+    });
+
+    // Handle URL parameters for direct verification
+    const urlParams = new URLSearchParams(window.location.search);
+    const certId = urlParams.get('id');
+    <% if (!certificateId) { %>
+    if (certId) {
+        document.getElementById('certificate-id').value = certId;
+        // Auto-submit if certificate ID is in URL
+        document.querySelector('form').dispatchEvent(new Event('submit'));
+    }
+    <% } %>
+</script>

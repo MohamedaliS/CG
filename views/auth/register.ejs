@@ -1,0 +1,111 @@
+<div class="min-h-screen flex items-center justify-center bg-gray-50 py-12 px-4 sm:px-6 lg:px-8">
+    <div class="max-w-md w-full space-y-8">
+        <div>
+            <h2 class="mt-6 text-center text-3xl font-extrabold text-gray-900">
+                Create your account
+            </h2>
+            <p class="mt-2 text-center text-sm text-gray-600">
+                Or
+                <a href="/login" class="font-medium text-blue-600 hover:text-blue-500">
+                    sign in to your existing account
+                </a>
+            </p>
+        </div>
+        
+        <form id="register-form" hx-post="/api/auth/register" hx-trigger="submit" hx-target="#register-result" class="mt-8 space-y-6">
+            <div class="rounded-md shadow-sm space-y-4">
+                <div>
+                    <label for="email" class="block text-sm font-medium text-gray-700">Email address</label>
+                    <input id="email" name="email" type="email" required 
+                           class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm" 
+                           placeholder="Enter your email">
+                </div>
+                
+                <div>
+                    <label for="organization_name" class="block text-sm font-medium text-gray-700">Organization name</label>
+                    <input id="organization_name" name="organization_name" type="text" required 
+                           class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm" 
+                           placeholder="Your organization name">
+                </div>
+                
+                <div>
+                    <label for="password" class="block text-sm font-medium text-gray-700">Password</label>
+                    <input id="password" name="password" type="password" required 
+                           class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm" 
+                           placeholder="Choose a strong password">
+                    <p class="mt-1 text-xs text-gray-500">
+                        Must be at least 8 characters with uppercase, lowercase, and number
+                    </p>
+                </div>
+                
+                <div>
+                    <label for="confirm_password" class="block text-sm font-medium text-gray-700">Confirm password</label>
+                    <input id="confirm_password" name="confirm_password" type="password" required 
+                           class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm" 
+                           placeholder="Confirm your password">
+                </div>
+            </div>
+
+            <div id="register-result" class="text-center"></div>
+
+            <div>
+                <button type="submit" 
+                        class="group relative w-full flex justify-center py-2 px-4 border border-transparent text-sm font-medium rounded-md text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500">
+                    <span class="loading-spinner"></span>
+                    Create account
+                </button>
+            </div>
+            
+            <div class="text-xs text-gray-500 text-center">
+                By creating an account, you agree to our terms of service and privacy policy.
+                <br>
+                Free accounts are limited to 10 certificates.
+            </div>
+        </form>
+
+        <div class="text-center">
+            <a href="/verify" class="text-sm text-blue-600 hover:text-blue-500">
+                Verify a certificate
+            </a>
+        </div>
+    </div>
+</div>
+
+<script>
+    // Password confirmation validation
+    document.getElementById('confirm_password').addEventListener('input', function() {
+        const password = document.getElementById('password').value;
+        const confirmPassword = this.value;
+        
+        if (confirmPassword && password !== confirmPassword) {
+            this.setCustomValidity('Passwords do not match');
+        } else {
+            this.setCustomValidity('');
+        }
+    });
+
+    document.addEventListener('htmx:afterRequest', function(event) {
+        if (event.detail.target.id === 'register-result') {
+            const xhr = event.detail.xhr;
+            const response = JSON.parse(xhr.responseText);
+            
+            if (xhr.status === 201 && response.success) {
+                // Store JWT token
+                localStorage.setItem('auth_token', response.data.token);
+                
+                // Show success message
+                document.getElementById('register-result').innerHTML = 
+                    '<div class="text-green-600 text-sm">Account created successfully! Redirecting...</div>';
+                
+                // Redirect to dashboard
+                setTimeout(() => {
+                    window.location.href = '/dashboard';
+                }, 1000);
+            } else {
+                // Show error message
+                document.getElementById('register-result').innerHTML = 
+                    `<div class="text-red-600 text-sm">${response.message || 'Registration failed'}</div>`;
+            }
+        }
+    });
+</script>

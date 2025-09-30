@@ -1,0 +1,165 @@
+<div class="max-w-7xl mx-auto py-6 sm:px-6 lg:px-8">
+    <!-- Dashboard header -->
+    <div class="bg-white shadow rounded-lg mb-6">
+        <div class="px-4 py-5 sm:p-6">
+            <div class="flex items-center justify-between">
+                <div>
+                    <h1 class="text-2xl font-bold text-gray-900">Dashboard</h1>
+                    <p class="mt-1 text-sm text-gray-600">
+                        Welcome back, <%= user.organization_name %>
+                    </p>
+                </div>
+                <div class="text-right">
+                    <p class="text-sm text-gray-500">Certificates generated</p>
+                    <p class="text-2xl font-bold text-blue-600"><%= user.certificate_count %> / <%= user.is_premium ? '∞' : '10' %></p>
+                    <% if (!user.is_premium && user.certificate_count >= 8) { %>
+                    <p class="text-xs text-yellow-600 mt-1">Approaching limit</p>
+                    <% } %>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Quick actions -->
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-6">
+        <div class="bg-white shadow rounded-lg p-6 hover:shadow-lg transition-shadow cursor-pointer" onclick="window.location.href='/templates/select'">
+            <div class="flex items-center">
+                <div class="flex-shrink-0">
+                    <svg class="h-8 w-8 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
+                    </svg>
+                </div>
+                <div class="ml-4">
+                    <h3 class="text-lg font-medium text-gray-900">Create Certificates</h3>
+                    <p class="text-sm text-gray-500">Choose a template and generate certificates</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="bg-white shadow rounded-lg p-6 hover:shadow-lg transition-shadow cursor-pointer" onclick="window.location.href='/templates/customize'">
+            <div class="flex items-center">
+                <div class="flex-shrink-0">
+                    <svg class="h-8 w-8 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 4a2 2 0 114 0v1a1 1 0 001 1h3a1 1 0 011 1v3a1 1 0 01-1 1h-1a2 2 0 100 4h1a1 1 0 011 1v3a1 1 0 01-1 1h-3a1 1 0 01-1-1v-1a2 2 0 10-4 0v1a1 1 0 01-1 1H7a1 1 0 01-1-1v-3a1 1 0 00-1-1H4a1 1 0 01-1-1V9a1 1 0 011-1h1a2 2 0 100-4H4a1 1 0 01-1-1V4a1 1 0 011-1h3a1 1 0 001-1z" />
+                    </svg>
+                </div>
+                <div class="ml-4">
+                    <h3 class="text-lg font-medium text-gray-900">Customize Template</h3>
+                    <p class="text-sm text-gray-500">Personalize templates with your branding</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="bg-white shadow rounded-lg p-6 hover:shadow-lg transition-shadow cursor-pointer" onclick="window.location.href='/certificates'">
+            <div class="flex items-center">
+                <div class="flex-shrink-0">
+                    <svg class="h-8 w-8 text-purple-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+                    </svg>
+                </div>
+                <div class="ml-4">
+                    <h3 class="text-lg font-medium text-gray-900">View Certificates</h3>
+                    <p class="text-sm text-gray-500">Browse and download your certificates</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Recent activity -->
+    <div class="bg-white shadow rounded-lg">
+        <div class="px-4 py-5 sm:p-6">
+            <h3 class="text-lg leading-6 font-medium text-gray-900 mb-4">Recent Activity</h3>
+            
+            <div id="recent-batches" 
+                 hx-get="/api/certificates/batches" 
+                 hx-trigger="load" 
+                 hx-headers='{"Authorization": "Bearer " + localStorage.getItem("auth_token")}'
+                 class="space-y-4">
+                <div class="text-center text-gray-500">
+                    <div class="loading-spinner inline-block"></div>
+                    Loading recent activity...
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Usage statistics (if premium or approaching limit) -->
+    <% if (!user.is_premium) { %>
+    <div class="mt-6 bg-yellow-50 border border-yellow-200 rounded-lg p-4">
+        <div class="flex">
+            <div class="flex-shrink-0">
+                <svg class="h-5 w-5 text-yellow-400" fill="currentColor" viewBox="0 0 20 20">
+                    <path fill-rule="evenodd" d="M8.257 3.099c.765-1.36 2.722-1.36 3.486 0l5.58 9.92c.75 1.334-.213 2.98-1.742 2.98H4.42c-1.53 0-2.493-1.646-1.743-2.98l5.58-9.92zM11 13a1 1 0 11-2 0 1 1 0 012 0zm-1-8a1 1 0 00-1 1v3a1 1 0 002 0V6a1 1 0 00-1-1z" clip-rule="evenodd" />
+                </svg>
+            </div>
+            <div class="ml-3">
+                <h3 class="text-sm font-medium text-yellow-800">Free Tier Limitation</h3>
+                <div class="mt-2 text-sm text-yellow-700">
+                    <p>You've used <%= user.certificate_count %> out of 10 free certificates. 
+                    <a href="#" class="font-medium underline">Upgrade to premium</a> for unlimited certificates and advanced features.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+    <% } %>
+</div>
+
+<script>
+    // Add authorization header to all HTMX requests
+    document.addEventListener('htmx:configRequest', function(event) {
+        const token = localStorage.getItem('auth_token');
+        if (token) {
+            event.detail.headers['Authorization'] = 'Bearer ' + token;
+        }
+    });
+
+    // Handle batch list response
+    document.addEventListener('htmx:afterRequest', function(event) {
+        if (event.detail.target.id === 'recent-batches') {
+            const xhr = event.detail.xhr;
+            
+            if (xhr.status === 200) {
+                const response = JSON.parse(xhr.responseText);
+                if (response.success && response.data.length > 0) {
+                    const batches = response.data.slice(0, 5); // Show last 5 batches
+                    const html = batches.map(batch => `
+                        <div class="flex items-center justify-between p-4 border border-gray-200 rounded-lg">
+                            <div>
+                                <h4 class="font-medium text-gray-900">${batch.event_name}</h4>
+                                <p class="text-sm text-gray-500">${batch.participant_count} certificates</p>
+                                <p class="text-xs text-gray-400">${new Date(batch.created_at).toLocaleDateString()}</p>
+                            </div>
+                            <div class="flex items-center space-x-2">
+                                <span class="batch-status ${batch.status}">${batch.status}</span>
+                                ${batch.status === 'completed' ? `
+                                    <a href="/api/certificates/batch/${batch.id}/download" 
+                                       class="text-blue-600 hover:text-blue-800 text-sm font-medium">
+                                        Download
+                                    </a>
+                                ` : ''}
+                            </div>
+                        </div>
+                    `).join('');
+                    
+                    event.detail.target.innerHTML = html;
+                } else {
+                    event.detail.target.innerHTML = `
+                        <div class="text-center text-gray-500 py-8">
+                            <svg class="mx-auto h-12 w-12 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+                            </svg>
+                            <h3 class="mt-2 text-sm font-medium text-gray-900">No certificates yet</h3>
+                            <p class="mt-1 text-sm text-gray-500">Get started by creating your first certificate.</p>
+                            <div class="mt-6">
+                                <button onclick="window.location.href='/templates/select'" 
+                                        class="inline-flex items-center px-4 py-2 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-blue-600 hover:bg-blue-700">
+                                    Create Certificate
+                                </button>
+                            </div>
+                        </div>
+                    `;
+                }
+            }
+        }
+    });
+</script>

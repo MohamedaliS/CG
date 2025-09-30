@@ -1,0 +1,208 @@
+# Certificate Generator - Phase 1 Implementation Prompt
+
+You are building a certificate generation platform with verification system using TypeScript, Fastify, PostgreSQL, and HTMX.
+
+## Tech Stack
+- Backend: Fastify + TypeScript
+- Database: PostgreSQL with pg driver
+- Frontend: HTMX + EJS templating
+- Image Processing: Sharp, Puppeteer, QRCode
+- Authentication: JWT with bcrypt
+
+## Project Structure
+Create the following structure:
+src/
+├── config/ (database.ts, server.ts, constants.ts)
+├── types/ (user.ts, template.ts, certificate.ts, index.ts)
+├── routes/ (auth.ts, templates.ts, certificates.ts, verification.ts)
+├── services/ (authService.ts, templateService.ts, certificateService.ts, verificationService.ts)
+├── middleware/ (auth.ts, validation.ts, errorHandler.ts)
+├── database/ (pool.ts, queries.ts, migrations/)
+├── utils/ (imageProcessor.ts, pdfGenerator.ts, qrCodeGenerator.ts, csvParser.ts, zipCreator.ts)
+└── app.ts
+public/
+├── css/styles.css
+├── js/htmx.min.js
+└── images/default-templates/ (modern.png, classic.png, minimalist.png)
+views/
+├── layouts/main.html
+├── auth/ (register.html, login.html)
+├── dashboard/index.html
+├── templates/ (select.html, customize.html)
+├── certificates/ (generate.html, list.html)
+└── verification/verify.html
+
+## Database Schema
+```sql
+-- Users table with email auth
+CREATE TABLE users (
+    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+    email VARCHAR(255) UNIQUE NOT NULL,
+    password_hash VARCHAR(255) NOT NULL,
+    organization_name VARCHAR(255) NOT NULL,
+    certificate_count INTEGER DEFAULT 0,
+    is_premium BOOLEAN DEFAULT FALSE,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    last_login TIMESTAMP
+);
+
+-- Default templates (3 pre-designed: modern, classic, minimalist)
+CREATE TABLE default_templates (
+    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+    name VARCHAR(100) NOT NULL,
+    preview_image_path VARCHAR(500) NOT NULL,
+    base_image_path VARCHAR(500) NOT NULL,
+    default_text_x INTEGER NOT NULL,
+    default_text_y INTEGER NOT NULL,
+    default_font_size INTEGER DEFAULT 48,
+    default_font_color VARCHAR(7) DEFAULT '#000000',
+    default_primary_color VARCHAR(7) DEFAULT '#2563eb',
+    is_active BOOLEAN DEFAULT TRUE
+);
+
+-- User templates (customized from defaults or uploaded)
+CREATE TABLE templates (
+    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+    user_id UUID REFERENCES users(id) ON DELETE CASCADE,
+    template_type VARCHAR(20) CHECK (template_type IN ('default', 'custom')),
+    default_template_id UUID REFERENCES default_templates(id),
+    custom_image_path VARCHAR(500),
+    logo_path VARCHAR(500),
+    primary_color VARCHAR(7) DEFAULT '#2563eb',
+    text_x_position INTEGER NOT NULL,
+    text_y_position INTEGER NOT NULL,
+    font_size INTEGER DEFAULT 48,
+    font_color VARCHAR(7) DEFAULT '#000000',
+    font_family VARCHAR(50) DEFAULT 'Arial',
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
+-- Certificates with unique IDs for verification
+CREATE TABLE certificates (
+    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+    user_id UUID REFERENCES users(id) ON DELETE CASCADE,
+    participant_name VARCHAR(255) NOT NULL,
+    event_name VARCHAR(255) NOT NULL,
+    batch_id UUID NOT NULL,
+    is_active BOOLEAN DEFAULT TRUE,
+    generated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
+-- Generation batches for bulk operations
+CREATE TABLE generation_batches (
+    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+    user_id UUID REFERENCES users(id) ON DELETE CASCADE,
+    event_name VARCHAR(255) NOT NULL,
+    participant_count INTEGER NOT NULL,
+    status VARCHAR(50) DEFAULT 'processing',
+    file_path VARCHAR(500),
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    completed_at TIMESTAMP
+);
+Core Features to Implement
+1. Authentication (src/routes/auth.ts, src/services/authService.ts)
+
+POST /register - bcrypt hash passwords, JWT token generation
+POST /login - validate credentials, return JWT
+Middleware to protect routes with JWT verification
+
+2. Template System (src/routes/templates.ts, src/services/templateService.ts)
+
+GET /templates/select - show 3 default templates
+POST /templates/customize - save user's customization (logo upload, color picker, text positioning)
+Support both default templates and custom image upload
+
+3. Certificate Generation (src/routes/certificates.ts, src/services/certificateService.ts)
+
+POST /certificates/generate - accept event name + CSV or manual participant list
+Use Sharp to composite: base template + logo + participant name + QR code
+Convert to PDF with Puppeteer
+Create ZIP with archiver for batch download
+Generate unique UUID per certificate
+Enforce 10 certificate limit for free users (check certificate_count)
+
+4. Verification Portal (src/routes/verification.ts)
+
+GET /verify/:certificateId - public route, no auth
+Display certificate details if valid
+Show "certificate not found" if invalid
+
+5. Image Processing (src/utils/imageProcessor.ts)
+typescript// Use Sharp to:
+// 1. Load base template image
+// 2. Overlay logo (if provided) at top-center
+// 3. Add participant name at configured position
+// 4. Add QR code at bottom-right
+// 5. Return buffer
+6. QR Code Generation (src/utils/qrCodeGenerator.ts)
+typescript// Generate QR encoding: https://yourdomain.com/verify/{certificateId}
+7. CSV Parser (src/utils/csvParser.ts)
+typescript// Parse CSV, extract names, validate, remove duplicates
+// Return string array of participant names
+TypeScript Types Required
+typescriptinterface User {
+  id: string;
+  email: string;
+  organization_name: string;
+  certificate_count: number;
+  is_premium: boolean;
+}
+
+interface Template {
+  id: string;
+  user_id: string;
+  template_type: 'default' | 'custom';
+  logo_path: string | null;
+  primary_color: string;
+  text_x_position: number;
+  text_y_position: number;
+  font_size: number;
+  font_color: string;
+}
+
+interface Certificate {
+  id: string;
+  participant_name: string;
+  event_name: string;
+  organization_name: string;
+  generated_at: Date;
+}
+Environment Variables (.env)
+DB_HOST=localhost
+DB_PORT=5432
+DB_NAME=certificate_gen
+DB_USER=postgres
+DB_PASSWORD=your_password
+JWT_SECRET=your_jwt_secret
+PORT=3000
+Key Implementation Notes
+
+Free tier: 10 certificates max (check user.certificate_count before generation)
+Premium users: is_premium flag bypasses limits
+Template customization: users can upload logo, change primary color, adjust text position
+All certificates get unique UUID as verification identifier
+QR codes link to public verification page
+CSV format: single column with participant names
+Batch generation: create all certs, ZIP them, return download link
+Use HTMX for dynamic UI updates without page reloads
+
+Fastify Plugins Needed
+
+@fastify/jwt for authentication
+@fastify/multipart for file uploads
+@fastify/static for serving public assets
+@fastify/view with EJS for HTML templating
+@fastify/cors if needed
+
+Implementation Priority
+
+Database setup + migrations
+User auth (register/login)
+Default templates seed data
+Template selection and customization
+Certificate generation engine
+Verification portal
+Dashboard with batch history
+
+Build this as a complete, production-ready Phase 1 MVP. Focus on clean TypeScript types, proper error handling, and HTMX-driven interactivity.
+RetryClaude does not have the ability to run the code it generates yet.Claude can make mistakes. Please double-check responses.

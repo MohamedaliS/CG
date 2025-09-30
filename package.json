@@ -1,0 +1,52 @@
+{
+  "name": "certificate-generator",
+  "version": "1.0.0",
+  "description": "Certificate generation platform with verification system",
+  "main": "dist/app.js",
+  "scripts": {
+    "dev": "tsx watch src/app.ts",
+    "build": "tsc",
+    "start": "node dist/app.js",
+    "db:migrate": "tsx src/database/migrations/run.ts",
+    "db:seed": "tsx src/database/seed.ts"
+  },
+  "keywords": [
+    "certificate",
+    "generator",
+    "verification",
+    "fastify",
+    "typescript"
+  ],
+  "author": "",
+  "license": "MIT",
+  "dependencies": {
+    "@fastify/cors": "^8.4.2",
+    "@fastify/jwt": "^7.2.4",
+    "@fastify/multipart": "^8.0.0",
+    "@fastify/static": "^6.12.0",
+    "@fastify/view": "^8.2.0",
+    "archiver": "^6.0.1",
+    "bcrypt": "^5.1.1",
+    "csv-parser": "^3.0.0",
+    "dotenv": "^16.3.1",
+    "ejs": "^3.1.9",
+    "fastify": "^4.24.3",
+    "pg": "^8.11.3",
+    "puppeteer": "^21.5.2",
+    "qrcode": "^1.5.3",
+    "sharp": "^0.32.6",
+    "uuid": "^9.0.1"
+  },
+  "devDependencies": {
+    "@types/archiver": "^6.0.2",
+    "@types/bcrypt": "^5.0.2",
+    "@types/ejs": "^3.1.5",
+    "@types/node": "^20.8.10",
+    "@types/pg": "^8.10.7",
+    "@types/qrcode": "^1.5.5",
+    "@types/uuid": "^9.0.7",
+    "pino-pretty": "^13.1.1",
+    "tsx": "^4.1.2",
+    "typescript": "^5.2.2"
+  }
+}
