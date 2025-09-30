@@ -78,6 +78,72 @@ async function buildApp() {
       });
     });
 
+    // Template selection page (protected)
+    fastify.get('/templates/select', {
+      preHandler: [async (request, reply) => {
+        try {
+          // Check for token in Authorization header first
+          const authHeader = request.headers.authorization;
+          let token = authHeader?.startsWith('Bearer ') ? authHeader.substring(7) : null;
+          
+          // If no header token, check cookies
+          if (!token && request.headers.cookie) {
+            const cookies = request.headers.cookie.split(';');
+            const authCookie = cookies.find(c => c.trim().startsWith('auth_token='));
+            token = authCookie ? authCookie.split('=')[1] : null;
+          }
+          
+          if (!token) {
+            return reply.redirect('/login');
+          }
+
+          const decoded = fastify.jwt.verify(token);
+          (request as any).user = decoded;
+        } catch (error) {
+          return reply.redirect('/login');
+        }
+      }],
+      handler: async (request, reply) => {
+        return (reply as any).view('templates/select', {
+          title: 'Select Template',
+          user: (request as any).user
+        });
+      }
+    });
+
+    // Template customization page (protected)
+    fastify.get('/templates/customize', {
+      preHandler: [async (request, reply) => {
+        try {
+          // Check for token in Authorization header first
+          const authHeader = request.headers.authorization;
+          let token = authHeader?.startsWith('Bearer ') ? authHeader.substring(7) : null;
+          
+          // If no header token, check cookies
+          if (!token && request.headers.cookie) {
+            const cookies = request.headers.cookie.split(';');
+            const authCookie = cookies.find(c => c.trim().startsWith('auth_token='));
+            token = authCookie ? authCookie.split('=')[1] : null;
+          }
+          
+          if (!token) {
+            return reply.redirect('/login');
+          }
+
+          const decoded = fastify.jwt.verify(token);
+          (request as any).user = decoded;
+        } catch (error) {
+          return reply.redirect('/login');
+        }
+      }],
+      handler: async (request, reply) => {
+        return (reply as any).view('templates/customize', {
+          title: 'Customize Template',
+          user: (request as any).user
+        });
+      }
+    });
+
     // Root redirect
     fastify.get('/', async (request, reply) => {
       return reply.redirect('/dashboard');

@@ -1,0 +1,244 @@
+<%- include('../layouts/main', { 
+    title: 'Customize Template',
+    user: user
+}) %>
+
+<div class="max-w-7xl mx-auto py-6 sm:px-6 lg:px-8">
+    <!-- Header -->
+    <div class="mb-8">
+        <div class="flex items-center justify-between">
+            <div>
+                <h1 class="text-3xl font-bold text-gray-900">Customize Template</h1>
+                <p class="mt-2 text-sm text-gray-600">Personalize your template with custom colors and branding</p>
+            </div>
+            <a href="/templates/select" class="bg-gray-100 hover:bg-gray-200 text-gray-800 px-4 py-2 rounded-lg transition-colors">
+                ← Back to Templates
+            </a>
+        </div>
+    </div>
+
+    <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+        <!-- Customization Panel -->
+        <div class="bg-white shadow rounded-lg p-6">
+            <h2 class="text-xl font-semibold text-gray-900 mb-6">Customization Options</h2>
+            
+            <form id="customize-form" class="space-y-6">
+                <input type="hidden" id="base-template-id" name="baseTemplateId">
+                
+                <!-- Template Selection -->
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-2">Base Template</label>
+                    <select id="template-select" name="templateId" class="block w-full border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500">
+                        <option value="">Loading templates...</option>
+                    </select>
+                </div>
+
+                <!-- Primary Color -->
+                <div>
+                    <label for="primary-color" class="block text-sm font-medium text-gray-700">Primary Color</label>
+                    <div class="mt-1 flex items-center space-x-3">
+                        <input type="color" id="primary-color" name="primaryColor" value="#2563eb"
+                               class="h-10 w-20 border border-gray-300 rounded-md">
+                        <input type="text" id="primary-color-hex" value="#2563eb"
+                               class="flex-1 border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500">
+                    </div>
+                </div>
+
+                <!-- Font Settings -->
+                <div>
+                    <label for="font-family" class="block text-sm font-medium text-gray-700">Font Family</label>
+                    <select id="font-family" name="fontFamily" class="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500">
+                        <option value="Arial">Arial</option>
+                        <option value="Times New Roman">Times New Roman</option>
+                        <option value="Helvetica">Helvetica</option>
+                        <option value="Georgia">Georgia</option>
+                        <option value="Verdana">Verdana</option>
+                    </select>
+                </div>
+
+                <div>
+                    <label for="font-size" class="block text-sm font-medium text-gray-700">Font Size</label>
+                    <div class="mt-1 flex items-center space-x-3">
+                        <input type="range" id="font-size" name="fontSize" min="20" max="80" value="48"
+                               class="flex-1">
+                        <span id="font-size-value" class="text-sm font-medium text-gray-700 w-12">48px</span>
+                    </div>
+                </div>
+
+                <div>
+                    <label for="font-color" class="block text-sm font-medium text-gray-700">Font Color</label>
+                    <div class="mt-1 flex items-center space-x-3">
+                        <input type="color" id="font-color" name="fontColor" value="#000000"
+                               class="h-10 w-20 border border-gray-300 rounded-md">
+                        <input type="text" id="font-color-hex" value="#000000"
+                               class="flex-1 border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500">
+                    </div>
+                </div>
+
+                <!-- Text Position -->
+                <div class="grid grid-cols-2 gap-4">
+                    <div>
+                        <label for="text-x" class="block text-sm font-medium text-gray-700">Text X Position</label>
+                        <input type="number" id="text-x" name="textX" value="400" min="0" max="1000"
+                               class="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500">
+                    </div>
+                    <div>
+                        <label for="text-y" class="block text-sm font-medium text-gray-700">Text Y Position</label>
+                        <input type="number" id="text-y" name="textY" value="300" min="0" max="800"
+                               class="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500">
+                    </div>
+                </div>
+
+                <!-- Logo Upload -->
+                <div>
+                    <label for="logo-upload" class="block text-sm font-medium text-gray-700">Logo (Optional)</label>
+                    <input type="file" id="logo-upload" name="logo" accept="image/*"
+                           class="mt-1 block w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-blue-50 file:text-blue-700 hover:file:bg-blue-100">
+                </div>
+
+                <!-- Actions -->
+                <div class="flex justify-end space-x-3">
+                    <button type="button" onclick="previewTemplate()" 
+                            class="px-4 py-2 text-sm font-medium text-gray-700 bg-gray-100 rounded-md hover:bg-gray-200">
+                        Preview
+                    </button>
+                    <button type="submit" 
+                            class="px-4 py-2 text-sm font-medium text-white bg-blue-600 rounded-md hover:bg-blue-700">
+                        Save Template
+                    </button>
+                </div>
+            </form>
+        </div>
+
+        <!-- Preview Panel -->
+        <div class="bg-white shadow rounded-lg p-6">
+            <h2 class="text-xl font-semibold text-gray-900 mb-6">Preview</h2>
+            
+            <div id="template-preview" class="border-2 border-dashed border-gray-300 rounded-lg p-8 text-center">
+                <p class="text-gray-500">Select a template to see preview</p>
+            </div>
+
+            <div class="mt-4 text-sm text-gray-600">
+                <p><strong>Preview Text:</strong> Sample Name</p>
+                <p><strong>Course:</strong> Sample Course</p>
+                <p><strong>Date:</strong> <%= new Date().toLocaleDateString() %></p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    loadDefaultTemplates();
+    setupEventListeners();
+    
+    // Check if template ID is in URL params
+    const urlParams = new URLSearchParams(window.location.search);
+    const templateId = urlParams.get('id');
+    if (templateId) {
+        document.getElementById('base-template-id').value = templateId;
+    }
+});
+
+function setupEventListeners() {
+    // Color pickers sync with hex inputs
+    document.getElementById('primary-color').addEventListener('change', function(e) {
+        document.getElementById('primary-color-hex').value = e.target.value;
+    });
+    
+    document.getElementById('primary-color-hex').addEventListener('change', function(e) {
+        document.getElementById('primary-color').value = e.target.value;
+    });
+    
+    document.getElementById('font-color').addEventListener('change', function(e) {
+        document.getElementById('font-color-hex').value = e.target.value;
+    });
+    
+    document.getElementById('font-color-hex').addEventListener('change', function(e) {
+        document.getElementById('font-color').value = e.target.value;
+    });
+    
+    // Font size slider
+    document.getElementById('font-size').addEventListener('input', function(e) {
+        document.getElementById('font-size-value').textContent = e.target.value + 'px';
+    });
+}
+
+async function loadDefaultTemplates() {
+    try {
+        const token = localStorage.getItem('auth_token');
+        const response = await fetch('/api/templates/defaults', {
+            headers: {
+                'Authorization': `Bearer ${token}`
+            }
+        });
+        
+        const data = await response.json();
+        
+        if (data.success) {
+            const select = document.getElementById('template-select');
+            select.innerHTML = '<option value="">Choose a template</option>' + 
+                data.data.map(template => 
+                    `<option value="${template.id}">${template.name}</option>`
+                ).join('');
+        }
+    } catch (error) {
+        console.error('Error loading templates:', error);
+    }
+}
+
+function previewTemplate() {
+    const preview = document.getElementById('template-preview');
+    const templateId = document.getElementById('template-select').value;
+    
+    if (!templateId) {
+        preview.innerHTML = '<p class="text-gray-500">Please select a template first</p>';
+        return;
+    }
+    
+    // Show a basic preview (in a real implementation, this would generate an actual preview)
+    const primaryColor = document.getElementById('primary-color').value;
+    const fontFamily = document.getElementById('font-family').value;
+    const fontSize = document.getElementById('font-size').value;
+    const fontColor = document.getElementById('font-color').value;
+    
+    preview.innerHTML = `
+        <div class="border rounded-lg p-8" style="background: linear-gradient(135deg, ${primaryColor}20, #ffffff);">
+            <div style="font-family: ${fontFamily}; font-size: ${fontSize}px; color: ${fontColor}; text-align: center;">
+                <h3 style="margin: 0; font-weight: bold;">Certificate of Achievement</h3>
+                <p style="margin: 10px 0; font-size: ${fontSize * 0.6}px;">Sample Name</p>
+                <p style="margin: 10px 0; font-size: ${fontSize * 0.5}px;">Sample Course</p>
+            </div>
+        </div>
+    `;
+}
+
+// Handle form submission
+document.getElementById('customize-form').addEventListener('submit', async function(e) {
+    e.preventDefault();
+    
+    const formData = new FormData(e.target);
+    const token = localStorage.getItem('auth_token');
+    
+    try {
+        const response = await fetch('/api/templates', {
+            method: 'POST',
+            headers: {
+                'Authorization': `Bearer ${token}`
+            },
+            body: formData
+        });
+        
+        const data = await response.json();
+        
+        if (data.success) {
+            alert('Template saved successfully!');
+            window.location.href = '/templates/select';
+        } else {
+            alert('Error saving template: ' + data.message);
+        }
+    } catch (error) {
+        alert('Error saving template');
+    }
+});
+</script>
