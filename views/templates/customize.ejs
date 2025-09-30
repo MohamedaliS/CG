@@ -1,3 +1,16 @@
+<style>
+    #template-preview > div {
+        border: 2px solid #d1d5db !important;
+        min-height: 400px;
+    }
+    
+    .certificate-text {
+        word-wrap: break-word !important;
+        overflow-wrap: break-word !important;
+        max-width: 100% !important;
+    }
+</style>
+
 <div class="max-w-7xl mx-auto py-6 sm:px-6 lg:px-8">
     <!-- Header -->
     <div class="mb-8">
@@ -25,6 +38,128 @@
                     <option value="">Loading templates...</option>
                 </select>
                 <p class="mt-2 text-sm text-gray-500">Choose a base template to customize</p>
+            </div>
+
+            <!-- Certificate Type & Text -->
+            <div class="bg-white shadow rounded-lg p-6">
+                <h3 class="text-lg font-semibold text-gray-900 mb-4">Certificate Type</h3>
+                <div class="space-y-4">
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-2">Certificate Title</label>
+                        <select id="certificate-title" class="block w-full border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500">
+                            <option value="Certificate of Achievement">Certificate of Achievement</option>
+                            <option value="Certificate of Completion">Certificate of Completion</option>
+                            <option value="Certificate of Excellence">Certificate of Excellence</option>
+                            <option value="Award of Recognition">Award of Recognition</option>
+                            <option value="Certificate of Participation">Certificate of Participation</option>
+                            <option value="Certificate of Honor">Certificate of Honor</option>
+                            <option value="Academic Excellence Award">Academic Excellence Award</option>
+                            <option value="Sports Achievement Certificate">Sports Achievement Certificate</option>
+                            <option value="Competition Winner Certificate">Competition Winner Certificate</option>
+                            <option value="Training Completion Certificate">Training Completion Certificate</option>
+                            <option value="Professional Certification">Professional Certification</option>
+                            <option value="Skill Assessment Certificate">Skill Assessment Certificate</option>
+                            <option value="Course Completion Certificate">Course Completion Certificate</option>
+                            <option value="Workshop Attendance Certificate">Workshop Attendance Certificate</option>
+                            <option value="Volunteer Appreciation Certificate">Volunteer Appreciation Certificate</option>
+                        </select>
+                    </div>
+                    
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-2">Completion Text</label>
+                        <select id="completion-text" class="block w-full border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500">
+                            <option value="has successfully completed">has successfully completed</option>
+                            <option value="has completed with excellence">has completed with excellence</option>
+                            <option value="has demonstrated mastery in">has demonstrated mastery in</option>
+                            <option value="has participated in">has participated in</option>
+                            <option value="has achieved excellence in">has achieved excellence in</option>
+                            <option value="has been awarded for">has been awarded for</option>
+                            <option value="has earned recognition for">has earned recognition for</option>
+                            <option value="has fulfilled the requirements for">has fulfilled the requirements for</option>
+                            <option value="has completed the training for">has completed the training for</option>
+                            <option value="has successfully finished">has successfully finished</option>
+                            <option value="has been certified in">has been certified in</option>
+                            <option value="has demonstrated proficiency in">has demonstrated proficiency in</option>
+                            <option value="has completed the course">has completed the course</option>
+                            <option value="has attended and completed">has attended and completed</option>
+                            <option value="has shown exceptional performance in">has shown exceptional performance in</option>
+                        </select>
+                    </div>
+
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-2">Additional Recognition Text</label>
+                        <select id="recognition-text" class="block w-full border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500">
+                            <option value="">None</option>
+                            <option value="with outstanding performance">with outstanding performance</option>
+                            <option value="with distinction">with distinction</option>
+                            <option value="with honors">with honors</option>
+                            <option value="with high distinction">with high distinction</option>
+                            <option value="with excellence">with excellence</option>
+                            <option value="with exceptional skill">with exceptional skill</option>
+                            <option value="demonstrating exceptional commitment">demonstrating exceptional commitment</option>
+                            <option value="showing remarkable dedication">showing remarkable dedication</option>
+                            <option value="in recognition of outstanding achievement">in recognition of outstanding achievement</option>
+                            <option value="for exceptional contribution">for exceptional contribution</option>
+                        </select>
+                    </div>
+
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-2">Course/Achievement Name</label>
+                        <input type="text" id="course-name" 
+                               placeholder="e.g., Advanced Web Development, Mathematics Excellence, Sports Competition"
+                               class="block w-full border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500"
+                               value="Advanced Web Development">
+                        <p class="mt-1 text-sm text-gray-500">The subject, course, or achievement being certified</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Predefined Themes -->
+            <div class="bg-white shadow rounded-lg p-6">
+                <h3 class="text-lg font-semibold text-gray-900 mb-4">Quick Themes</h3>
+                <div class="grid grid-cols-2 gap-3">
+                    <button type="button" data-theme="winner" class="theme-button px-3 py-2 text-sm border border-yellow-300 rounded-md hover:bg-yellow-50 focus:ring-2 focus:ring-yellow-500 bg-gradient-to-r from-yellow-100 to-yellow-200">
+                        🥇 Winner Gold
+                    </button>
+                    <button type="button" data-theme="runner-up" class="theme-button px-3 py-2 text-sm border border-gray-300 rounded-md hover:bg-gray-50 focus:ring-2 focus:ring-gray-500 bg-gradient-to-r from-gray-100 to-gray-200">
+                        🥈 Runner Up Silver
+                    </button>
+                    <button type="button" data-theme="third-place" class="theme-button px-3 py-2 text-sm border border-orange-300 rounded-md hover:bg-orange-50 focus:ring-2 focus:ring-orange-500 bg-gradient-to-r from-orange-100 to-orange-200">
+                        🥉 Third Place Bronze
+                    </button>
+                    <button type="button" data-theme="participation" class="theme-button px-3 py-2 text-sm border border-green-300 rounded-md hover:bg-green-50 focus:ring-2 focus:ring-green-500 bg-gradient-to-r from-green-100 to-green-200">
+                        🎖️ Participation
+                    </button>
+                    <button type="button" data-theme="academic" class="theme-button px-3 py-2 text-sm border border-blue-300 rounded-md hover:bg-blue-50 focus:ring-2 focus:ring-blue-500 bg-gradient-to-r from-blue-100 to-blue-200">
+                        🎓 Academic
+                    </button>
+                    <button type="button" data-theme="corporate" class="theme-button px-3 py-2 text-sm border border-indigo-300 rounded-md hover:bg-indigo-50 focus:ring-2 focus:ring-indigo-500 bg-gradient-to-r from-indigo-100 to-indigo-200">
+                        🏢 Corporate
+                    </button>
+                    <button type="button" data-theme="sports" class="theme-button px-3 py-2 text-sm border border-red-300 rounded-md hover:bg-red-50 focus:ring-2 focus:ring-red-500 bg-gradient-to-r from-red-100 to-red-200">
+                        ⚽ Sports
+                    </button>
+                    <button type="button" data-theme="elegant" class="theme-button px-3 py-2 text-sm border border-purple-300 rounded-md hover:bg-purple-50 focus:ring-2 focus:ring-purple-500 bg-gradient-to-r from-purple-100 to-purple-200">
+                        ✨ Elegant
+                    </button>
+                </div>
+                <p class="mt-2 text-xs text-gray-500">Click a theme to apply predefined colors and styles</p>
+            </div>
+
+            <!-- Color Palette Presets -->
+            <div class="bg-white shadow rounded-lg p-6">
+                <h3 class="text-lg font-semibold text-gray-900 mb-4">Color Presets</h3>
+                <div class="grid grid-cols-4 gap-2 mb-4">
+                    <button type="button" data-preset="blue" class="color-preset h-8 rounded border-2 border-gray-300 hover:border-gray-400" style="background: linear-gradient(45deg, #3b82f6, #1e40af);" title="Blue Professional"></button>
+                    <button type="button" data-preset="red" class="color-preset h-8 rounded border-2 border-gray-300 hover:border-gray-400" style="background: linear-gradient(45deg, #ef4444, #dc2626);" title="Red Energy"></button>
+                    <button type="button" data-preset="green" class="color-preset h-8 rounded border-2 border-gray-300 hover:border-gray-400" style="background: linear-gradient(45deg, #10b981, #059669);" title="Green Growth"></button>
+                    <button type="button" data-preset="purple" class="color-preset h-8 rounded border-2 border-gray-300 hover:border-gray-400" style="background: linear-gradient(45deg, #8b5cf6, #7c3aed);" title="Purple Elegance"></button>
+                    <button type="button" data-preset="orange" class="color-preset h-8 rounded border-2 border-gray-300 hover:border-gray-400" style="background: linear-gradient(45deg, #f59e0b, #d97706);" title="Orange Warmth"></button>
+                    <button type="button" data-preset="teal" class="color-preset h-8 rounded border-2 border-gray-300 hover:border-gray-400" style="background: linear-gradient(45deg, #14b8a6, #0d9488);" title="Teal Modern"></button>
+                    <button type="button" data-preset="pink" class="color-preset h-8 rounded border-2 border-gray-300 hover:border-gray-400" style="background: linear-gradient(45deg, #ec4899, #db2777);" title="Pink Creative"></button>
+                    <button type="button" data-preset="indigo" class="color-preset h-8 rounded border-2 border-gray-300 hover:border-gray-400" style="background: linear-gradient(45deg, #6366f1, #4f46e5);" title="Indigo Tech"></button>
+                </div>
+                <p class="text-xs text-gray-500">Click a color preset to apply to your certificate</p>
             </div>
 
             <!-- Colors -->
@@ -94,28 +229,31 @@
                     <div>
                         <label class="block text-sm font-medium text-gray-700 mb-2">Title Font Size</label>
                         <div class="flex items-center space-x-3">
-                            <input type="range" id="title-font-size" min="24" max="120" value="48" 
+                            <input type="range" id="title-font-size" min="24" max="72" value="48" 
                                    class="flex-1">
                             <span id="title-font-size-value" class="text-sm font-medium text-gray-700 w-16">48px</span>
                         </div>
+                        <p class="text-xs text-gray-500 mt-1">Maximum 72px to prevent overflow</p>
                     </div>
 
                     <div>
                         <label class="block text-sm font-medium text-gray-700 mb-2">Name Font Size</label>
                         <div class="flex items-center space-x-3">
-                            <input type="range" id="name-font-size" min="16" max="80" value="36" 
+                            <input type="range" id="name-font-size" min="16" max="54" value="36" 
                                    class="flex-1">
                             <span id="name-font-size-value" class="text-sm font-medium text-gray-700 w-16">36px</span>
                         </div>
+                        <p class="text-xs text-gray-500 mt-1">Maximum 54px to prevent overflow</p>
                     </div>
 
                     <div>
                         <label class="block text-sm font-medium text-gray-700 mb-2">Course Font Size</label>
                         <div class="flex items-center space-x-3">
-                            <input type="range" id="course-font-size" min="12" max="60" value="24" 
+                            <input type="range" id="course-font-size" min="12" max="36" value="24" 
                                    class="flex-1">
                             <span id="course-font-size-value" class="text-sm font-medium text-gray-700 w-16">24px</span>
                         </div>
+                        <p class="text-xs text-gray-500 mt-1">Maximum 36px to prevent overflow</p>
                     </div>
 
                     <div>
@@ -348,7 +486,7 @@
                         <div>
                             <p><strong>Preview Data:</strong></p>
                             <p>Name: John Doe</p>
-                            <p>Course: Advanced Web Development</p>
+                            <p>Course: <span id="preview-course-name">Advanced Web Development</span></p>
                         </div>
                         <div>
                             <p>Date: <%= new Date().toLocaleDateString() %></p>
@@ -449,6 +587,9 @@
 </div>
 
 <script>
+// Template data from server
+const selectedTemplate = <%- selectedTemplate ? JSON.stringify(selectedTemplate) : 'null' %>;
+
 let currentTemplate = null;
 let currentConfig = {
     primaryColor: '#2563eb',
@@ -472,10 +613,131 @@ let currentConfig = {
     borderWidth: 2,
     borderRadius: 8,
     addShadow: false,
-    addGradient: false
+    addGradient: false,
+    certificateTitle: 'Certificate of Achievement',
+    completionText: 'has successfully completed',
+    recognitionText: '',
+    courseName: 'Advanced Web Development'
+};
+
+// Predefined themes
+const themes = {
+    winner: {
+        primaryColor: '#d69e2e',
+        backgroundColor: '#fffbeb',
+        fontColor: '#744210',
+        borderColor: '#d69e2e',
+        borderWidth: 4,
+        padding: 50,
+        addGradient: true,
+        certificateTitle: 'Winner Certificate',
+        completionText: 'has achieved first place in',
+        recognitionText: 'with outstanding performance'
+    },
+    'runner-up': {
+        primaryColor: '#a0aec0',
+        backgroundColor: '#f7fafc',
+        fontColor: '#4a5568',
+        borderColor: '#a0aec0',
+        borderWidth: 3,
+        padding: 45,
+        addShadow: true,
+        certificateTitle: 'Runner-Up Certificate',
+        completionText: 'has achieved second place in',
+        recognitionText: 'with excellent performance'
+    },
+    'third-place': {
+        primaryColor: '#c05621',
+        backgroundColor: '#fffaf0',
+        fontColor: '#7b341e',
+        borderColor: '#c05621',
+        borderWidth: 3,
+        padding: 45,
+        certificateTitle: 'Third Place Certificate',
+        completionText: 'has achieved third place in',
+        recognitionText: 'with commendable performance'
+    },
+    participation: {
+        primaryColor: '#38a169',
+        backgroundColor: '#f0fff4',
+        fontColor: '#2f855a',
+        borderColor: '#38a169',
+        borderWidth: 2,
+        padding: 40,
+        certificateTitle: 'Certificate of Participation',
+        completionText: 'has participated in',
+        recognitionText: 'demonstrating exceptional commitment'
+    },
+    academic: {
+        primaryColor: '#3182ce',
+        backgroundColor: '#ebf8ff',
+        fontColor: '#2c5282',
+        borderColor: '#3182ce',
+        borderWidth: 2,
+        padding: 45,
+        addShadow: true,
+        certificateTitle: 'Academic Excellence Award',
+        completionText: 'has demonstrated mastery in',
+        recognitionText: 'with distinction'
+    },
+    corporate: {
+        primaryColor: '#4299e1',
+        backgroundColor: '#f7fafc',
+        fontColor: '#2d3748',
+        borderColor: '#4299e1',
+        borderWidth: 1,
+        padding: 35,
+        fontFamily: 'Georgia',
+        certificateTitle: 'Professional Certification',
+        completionText: 'has fulfilled the requirements for',
+        recognitionText: ''
+    },
+    sports: {
+        primaryColor: '#e53e3e',
+        backgroundColor: '#fed7d7',
+        fontColor: '#742a2a',
+        borderColor: '#e53e3e',
+        borderWidth: 3,
+        padding: 50,
+        addGradient: true,
+        certificateTitle: 'Sports Achievement Certificate',
+        completionText: 'has excelled in',
+        recognitionText: 'showing remarkable dedication'
+    },
+    elegant: {
+        primaryColor: '#805ad5',
+        backgroundColor: '#faf5ff',
+        fontColor: '#553c9a',
+        borderColor: '#805ad5',
+        borderWidth: 2,
+        padding: 40,
+        addShadow: true,
+        addGradient: true,
+        fontFamily: 'Georgia',
+        certificateTitle: 'Award of Recognition',
+        completionText: 'has been awarded for',
+        recognitionText: 'with excellence'
+    }
+};
+
+// Color presets
+const colorPresets = {
+    blue: { primary: '#3b82f6', background: '#eff6ff', text: '#1e40af', border: '#3b82f6' },
+    red: { primary: '#ef4444', background: '#fef2f2', text: '#991b1b', border: '#ef4444' },
+    green: { primary: '#10b981', background: '#ecfdf5', text: '#065f46', border: '#10b981' },
+    purple: { primary: '#8b5cf6', background: '#f5f3ff', text: '#5b21b6', border: '#8b5cf6' },
+    orange: { primary: '#f59e0b', background: '#fffbeb', text: '#92400e', border: '#f59e0b' },
+    teal: { primary: '#14b8a6', background: '#f0fdfa', text: '#134e4a', border: '#14b8a6' },
+    pink: { primary: '#ec4899', background: '#fdf2f8', text: '#9d174d', border: '#ec4899' },
+    indigo: { primary: '#6366f1', background: '#eef2ff', text: '#3730a3', border: '#6366f1' }
 };
 
 document.addEventListener('DOMContentLoaded', function() {
+    // Initialize with selected template if available
+    if (selectedTemplate) {
+        initializeWithTemplate(selectedTemplate);
+    }
+    
     initializeCustomizer();
     loadDefaultTemplates();
     setupEventListeners();
@@ -490,6 +752,51 @@ document.addEventListener('DOMContentLoaded', function() {
         }, 1000);
     }
 });
+
+function initializeWithTemplate(template) {
+    if (!template) return;
+    
+    // Apply template-specific colors and settings
+    currentConfig.primaryColor = template.default_primary_color || currentConfig.primaryColor;
+    currentConfig.fontColor = template.default_font_color || currentConfig.fontColor;
+    currentConfig.titleFontSize = template.default_font_size || currentConfig.titleFontSize;
+    currentConfig.textX = template.default_text_x || currentConfig.textX;
+    currentConfig.textY = template.default_text_y || currentConfig.textY;
+    
+    // Apply template-specific theme based on name
+    const templateName = template.name.toLowerCase();
+    if (templateName.includes('golden') || templateName.includes('winner')) {
+        applyTheme('winner');
+        currentConfig.certificateTitle = 'Certificate of Excellence';
+        currentConfig.completionText = 'has demonstrated exceptional excellence in';
+        currentConfig.recognitionText = 'with outstanding performance';
+    } else if (templateName.includes('silver') || templateName.includes('achievement')) {
+        applyTheme('runner');
+        currentConfig.certificateTitle = 'Achievement Award';
+        currentConfig.completionText = 'has achieved outstanding performance in';
+        currentConfig.recognitionText = 'with distinction';
+    } else if (templateName.includes('bronze') || templateName.includes('participation')) {
+        applyTheme('bronze');
+        currentConfig.certificateTitle = 'Certificate of Participation';
+        currentConfig.completionText = 'has successfully participated in';
+    } else if (templateName.includes('academic')) {
+        applyTheme('academic');
+        currentConfig.certificateTitle = 'Academic Excellence Award';
+        currentConfig.completionText = 'has excelled academically in';
+        currentConfig.recognitionText = 'with honors';
+    } else if (templateName.includes('corporate')) {
+        applyTheme('corporate');
+        currentConfig.certificateTitle = 'Professional Achievement';
+        currentConfig.completionText = 'has successfully completed the professional program';
+    } else if (templateName.includes('modern') || templateName.includes('elegant')) {
+        applyTheme('elegant');
+        currentConfig.certificateTitle = 'Certificate of Achievement';
+        currentConfig.completionText = 'has successfully completed';
+    }
+    
+    // Set the template as selected in dropdown
+    currentTemplate = template;
+}
 
 function initializeCustomizer() {
     // Set initial values from config
@@ -520,6 +827,11 @@ function initializeCustomizer() {
     document.getElementById('border-width').value = currentConfig.borderWidth;
     document.getElementById('border-radius').value = currentConfig.borderRadius;
     
+    document.getElementById('certificate-title').value = currentConfig.certificateTitle;
+    document.getElementById('completion-text').value = currentConfig.completionText;
+    document.getElementById('recognition-text').value = currentConfig.recognitionText;
+    document.getElementById('course-name').value = currentConfig.courseName;
+    
     // Update display values
     updateSliderDisplays();
 }
@@ -539,6 +851,33 @@ function setupEventListeners() {
     setupInputListener('organization-name', 'organizationName');
     setupInputListener('logo-position', 'logoPosition');
     setupInputListener('border-style', 'borderStyle');
+    setupInputListener('certificate-title', 'certificateTitle');
+    setupInputListener('completion-text', 'completionText');
+    setupInputListener('recognition-text', 'recognitionText');
+    setupInputListener('course-name', 'courseName');
+    
+    // Update preview when course name changes
+    document.getElementById('course-name').addEventListener('input', function() {
+        currentConfig.courseName = this.value;
+        document.getElementById('preview-course-name').textContent = this.value || 'Course Name';
+        updatePreview();
+    });
+    
+    // Theme buttons
+    document.querySelectorAll('.theme-button').forEach(button => {
+        button.addEventListener('click', function() {
+            const theme = this.dataset.theme;
+            applyTheme(theme);
+        });
+    });
+    
+    // Color preset buttons
+    document.querySelectorAll('.color-preset').forEach(button => {
+        button.addEventListener('click', function() {
+            const preset = this.dataset.preset;
+            applyColorPreset(preset);
+        });
+    });
     
     // Sliders
     setupSliderListener('title-font-size', 'title-font-size-value', 'titleFontSize', 'px');
@@ -579,6 +918,17 @@ function setupEventListeners() {
     document.getElementById('close-fullscreen').addEventListener('click', closeFullscreenPreview);
 }
 
+function validateFontSize(size, type) {
+    const maxSizes = {
+        titleFontSize: 72,
+        nameFontSize: 54,
+        courseFontSize: 36
+    };
+    
+    const maxSize = maxSizes[type] || 72;
+    return Math.min(size, maxSize);
+}
+
 function setupColorSync(colorId, hexId, configKey) {
     const colorInput = document.getElementById(colorId);
     const hexInput = document.getElementById(hexId);
@@ -607,7 +957,14 @@ function setupInputListener(inputId, configKey, type = 'string') {
 
 function setupSliderListener(sliderId, displayId, configKey, unit) {
     document.getElementById(sliderId).addEventListener('input', function() {
-        const value = Number(this.value);
+        let value = Number(this.value);
+        
+        // Validate font sizes to prevent overflow
+        if (configKey.includes('FontSize')) {
+            value = validateFontSize(value, configKey);
+            this.value = value; // Update slider to validated value
+        }
+        
         document.getElementById(displayId).textContent = value + unit;
         currentConfig[configKey] = value;
         updatePreview();
@@ -632,6 +989,48 @@ function setTextAlign(align) {
     document.getElementById(`align-${align}`).classList.add('bg-blue-50', 'border-blue-300');
     
     updatePreview();
+}
+
+function applyTheme(themeName) {
+    const theme = themes[themeName];
+    if (!theme) return;
+    
+    // Apply theme settings to config
+    Object.assign(currentConfig, theme);
+    
+    // Update form inputs
+    initializeCustomizer();
+    
+    // Update preview
+    updatePreview();
+    
+    showSuccess(`${themeName.replace('-', ' ')} theme applied!`);
+}
+
+function applyColorPreset(presetName) {
+    const preset = colorPresets[presetName];
+    if (!preset) return;
+    
+    // Apply color preset
+    currentConfig.primaryColor = preset.primary;
+    currentConfig.backgroundColor = preset.background;
+    currentConfig.fontColor = preset.text;
+    currentConfig.borderColor = preset.border;
+    
+    // Update color inputs
+    document.getElementById('primary-color').value = preset.primary;
+    document.getElementById('primary-color-hex').value = preset.primary;
+    document.getElementById('background-color').value = preset.background;
+    document.getElementById('background-color-hex').value = preset.background;
+    document.getElementById('font-color').value = preset.text;
+    document.getElementById('font-color-hex').value = preset.text;
+    document.getElementById('border-color').value = preset.border;
+    document.getElementById('border-color-hex').value = preset.border;
+    
+    // Update preview
+    updatePreview();
+    
+    showSuccess(`${presetName} color preset applied!`);
 }
 
 function updateSliderDisplays() {
@@ -705,7 +1104,8 @@ function updatePreview() {
         'box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);' : '';
     
     const borderStyle = currentConfig.borderStyle !== 'none' ? 
-        `border: ${currentConfig.borderWidth}px ${currentConfig.borderStyle} ${currentConfig.borderColor};` : '';
+        `border: ${currentConfig.borderWidth}px ${currentConfig.borderStyle} ${currentConfig.borderColor} !important;` : 
+        `border: 2px solid ${currentConfig.borderColor} !important;`;
     
     preview.innerHTML = `
         <div class="h-full flex flex-col justify-center" style="
@@ -717,6 +1117,9 @@ function updatePreview() {
             font-family: ${currentConfig.fontFamily};
             text-align: ${currentConfig.textAlign};
             line-height: ${currentConfig.lineSpacing};
+            overflow: hidden;
+            box-sizing: border-box;
+            position: relative;
         ">
             ${currentConfig.logoPosition === 'top' && currentConfig.organizationName ? 
                 `<div style="margin-bottom: 20px;">
@@ -725,12 +1128,15 @@ function updatePreview() {
             }
             
             <div style="flex: 1; display: flex; flex-direction: column; justify-content: center;">
-                <h1 style="
+                <h1 class="certificate-text" style="
                     font-size: ${currentConfig.titleFontSize}px;
                     font-weight: ${currentConfig.fontWeight};
                     color: ${currentConfig.fontColor};
                     margin: 0 0 20px 0;
-                ">Certificate of Achievement</h1>
+                    word-wrap: break-word;
+                    overflow: hidden;
+                    line-height: 1.2;
+                ">${currentConfig.certificateTitle}</h1>
                 
                 <p style="
                     font-size: ${currentConfig.courseFontSize}px;
@@ -739,11 +1145,14 @@ function updatePreview() {
                     opacity: 0.8;
                 ">This certifies that</p>
                 
-                <h2 style="
+                <h2 class="certificate-text" style="
                     font-size: ${currentConfig.nameFontSize}px;
                     font-weight: ${currentConfig.fontWeight};
                     color: ${currentConfig.primaryColor};
                     margin: 20px 0;
+                    word-wrap: break-word;
+                    overflow: hidden;
+                    line-height: 1.2;
                 ">John Doe</h2>
                 
                 <p style="
@@ -751,14 +1160,27 @@ function updatePreview() {
                     color: ${currentConfig.fontColor};
                     margin: 10px 0;
                     opacity: 0.8;
-                ">has successfully completed</p>
+                ">${currentConfig.completionText}</p>
                 
-                <h3 style="
+                <h3 class="certificate-text" style="
                     font-size: ${currentConfig.courseFontSize + 4}px;
                     font-weight: ${currentConfig.fontWeight};
                     color: ${currentConfig.fontColor};
                     margin: 20px 0;
-                ">Advanced Web Development</h3>
+                    word-wrap: break-word;
+                    overflow: hidden;
+                    line-height: 1.2;
+                ">${currentConfig.courseName}</h3>
+                
+                ${currentConfig.recognitionText ? `
+                <p style="
+                    font-size: ${currentConfig.courseFontSize - 2}px;
+                    color: ${currentConfig.primaryColor};
+                    margin: 15px 0;
+                    font-style: italic;
+                    font-weight: 500;
+                ">${currentConfig.recognitionText}</p>
+                ` : ''}
                 
                 <p style="
                     font-size: ${currentConfig.courseFontSize - 4}px;

@@ -115,13 +115,13 @@ function displayTemplates(templates) {
     grid.innerHTML = templates.map(template => `
         <div class="bg-white rounded-lg shadow-md overflow-hidden hover:shadow-lg transition-shadow">
             <div class="aspect-w-16 aspect-h-9 bg-gray-200">
-                <img src="${template.preview_image_path}" alt="${template.name}" 
+                <img src="/templates/${template.id}/preview" alt="${template.name}" 
                      class="w-full h-48 object-cover" 
                      onerror="this.src='/public/images/default-templates/placeholder.png'">
             </div>
             <div class="p-4">
                 <h3 class="text-lg font-medium text-gray-900 mb-2">${template.name}</h3>
-                <p class="text-sm text-gray-600 mb-4">Professional template for certificates</p>
+                <p class="text-sm text-gray-600 mb-4">${getTemplateDescription(template.name)}</p>
                 <div class="flex space-x-2">
                     <button onclick="selectTemplate('${template.id}', '${template.name}')" 
                             class="flex-1 bg-blue-600 text-white px-3 py-2 rounded-md text-sm font-medium hover:bg-blue-700">
@@ -145,6 +145,21 @@ function selectTemplate(templateId, templateName) {
 
 function customizeTemplate(templateId) {
     window.location.href = `/templates/customize?id=${templateId}`;
+}
+
+function getTemplateDescription(templateName) {
+    const descriptions = {
+        'Golden Winner': 'Perfect for first place winners and top achievers',
+        'Silver Achievement': 'Ideal for runners-up and outstanding performers',
+        'Bronze Participation': 'Great for participation and completion recognition',
+        'Academic Excellence': 'Designed for academic achievements and scholarships',
+        'Corporate Blue': 'Professional template for business and corporate awards',
+        'Modern Elegant': 'Contemporary design for modern achievement recognition',
+        'Classic Professional': 'Traditional professional template for any occasion',
+        'Minimalist Clean': 'Simple, clean design for versatile use'
+    };
+    
+    return descriptions[templateName] || 'Professional template for certificates';
 }
 
 function closeCertModal() {

@@ -71,26 +71,59 @@ export default async function templateRoutes(fastify: FastifyInstance) {
 
   // Customize template from default
   fastify.post('/templates/customize/default', {
-    preHandler: [authenticateToken, validateTemplateCustomization],
+    preHandler: [authenticateToken],
     handler: async (request, reply) => {
       try {
-        const body = request.body as any;
-        const customization = {
-          primary_color: body.primary_color,
-          font_color: body.font_color,
-          font_family: body.font_family,
-          font_size: Number(body.font_size),
-          text_x_position: Number(body.text_x_position),
-          text_y_position: Number(body.text_y_position),
-        } as TemplateCustomization;
+        // Handle multipart form data
+        const parts = request.parts();
+        const fields: Record<string, string> = {};
+        let logoFile: any = null;
         
-        const defaultTemplateId = body.baseTemplateId;
-        if (!defaultTemplateId) {
+        for await (const part of parts) {
+          if (part.type === 'file') {
+            logoFile = part;
+          } else {
+            // @ts-ignore
+            fields[part.fieldname] = part.value;
+          }
+        }
+        
+        // Validate required fields
+        const requiredFields = ['baseTemplateId', 'primary_color', 'font_color', 'font_family', 'font_size', 'text_x_position', 'text_y_position'];
+        for (const field of requiredFields) {
+          if (!fields[field]) {
+            return reply.status(400).send({
+              success: false,
+              error: `${field} is required`,
+            } as ApiResponse);
+          }
+        }
+        
+        // Validate color format
+        const colorRegex = /^#[0-9A-Fa-f]{6}$/;
+        if (!colorRegex.test(fields.primary_color)) {
           return reply.status(400).send({
             success: false,
-            error: 'Base template ID is required',
+            error: 'Invalid primary_color format',
           } as ApiResponse);
         }
+        if (!colorRegex.test(fields.font_color)) {
+          return reply.status(400).send({
+            success: false,
+            error: 'Invalid font_color format',
+          } as ApiResponse);
+        }
+        
+        const customization = {
+          primary_color: fields.primary_color,
+          font_color: fields.font_color,
+          font_family: fields.font_family,
+          font_size: Number(fields.font_size),
+          text_x_position: Number(fields.text_x_position),
+          text_y_position: Number(fields.text_y_position),
+        } as TemplateCustomization;
+        
+        const defaultTemplateId = fields.baseTemplateId;
 
         const template = await TemplateService.createTemplateFromDefault(
           request.user!.id,
@@ -104,6 +137,7 @@ export default async function templateRoutes(fastify: FastifyInstance) {
           message: 'Template customized successfully',
         } as ApiResponse);
       } catch (error) {
+        console.error('Template customization error:', error);
         if (error instanceof Error) {
           return reply.status(400).send({
             success: false,
@@ -193,7 +227,7 @@ export default async function templateRoutes(fastify: FastifyInstance) {
         const buffer = await data.toBuffer();
         
         // Validate image file
-        await TemplateService.validateImageFile(buffer, 5 * 1024 * 1024); // 5MB limit for logos
+        await TemplateService.validateImageFile(buffer); // Validate logo file
 
         // Save uploaded file
         const uploadDir = path.join(process.cwd(), CONSTANTS.UPLOAD_DIR, 'logos');

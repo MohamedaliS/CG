@@ -32,6 +32,37 @@ async function buildApp() {
     await fastify.register(certificateRoutes, { prefix: '/api' });
     await fastify.register(verificationRoutes);
 
+    // Register template preview route (without API prefix)
+    await fastify.register(async function (fastify) {
+      fastify.get('/templates/:id/preview', {
+        handler: async (request, reply) => {
+          try {
+            const { id } = request.params as { id: string };
+            const { TemplateService } = await import('./services/templateService');
+            const template = await TemplateService.getDefaultTemplateById(id);
+            
+            if (!template) {
+              return reply.status(404).send({
+                success: false,
+                error: 'Template not found',
+              });
+            }
+
+            // Generate a preview image with sample content
+            const previewBuffer = await TemplateService.generatePreviewImage(template);
+            
+            reply.type('image/png').send(previewBuffer);
+          } catch (error) {
+            fastify.log.error('Preview generation error:', error);
+            return reply.status(500).send({
+              success: false,
+              error: 'Failed to generate preview',
+            });
+          }
+        }
+      });
+    });
+
     // Dashboard route (protected)
     fastify.get('/dashboard', {
       preHandler: [async (request, reply) => {
@@ -170,9 +201,22 @@ async function buildApp() {
         }
       }],
       handler: async (request, reply) => {
+        const { id } = request.query as { id?: string };
+        let selectedTemplate = null;
+        
+        if (id) {
+          try {
+            const { TemplateService } = await import('./services/templateService');
+            selectedTemplate = await TemplateService.getDefaultTemplateById(id);
+          } catch (error) {
+            fastify.log.error('Error loading template for customization:', error);
+          }
+        }
+        
         return (reply as any).view('templates/customize', {
           title: 'Customize Template',
-          user: (request as any).user
+          user: (request as any).user,
+          selectedTemplate
         });
       }
     });
