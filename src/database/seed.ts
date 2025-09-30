@@ -4,22 +4,22 @@ import db from './pool';
 const defaultTemplates = [
   {
     name: 'Modern',
-    preview_image_path: '/templates/modern-preview.png',
-    base_image_path: '/templates/modern-base.png',
+    preview_image_path: '/public/images/default-templates/modern.png',
+    base_image_path: '/public/images/default-templates/modern.png',
     default_text_x: 400,
     default_text_y: 300,
   },
   {
     name: 'Classic',
-    preview_image_path: '/templates/classic-preview.png',
-    base_image_path: '/templates/classic-base.png',
+    preview_image_path: '/public/images/default-templates/classic.png',
+    base_image_path: '/public/images/default-templates/classic.png',
     default_text_x: 350,
     default_text_y: 280,
   },
   {
     name: 'Minimalist',
-    preview_image_path: '/templates/minimalist-preview.png',
-    base_image_path: '/templates/minimalist-base.png',
+    preview_image_path: '/public/images/default-templates/minimalist.png',
+    base_image_path: '/public/images/default-templates/minimalist.png',
     default_text_x: 512,
     default_text_y: 384,
   }

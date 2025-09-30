@@ -147,12 +147,22 @@ export class TemplateService {
   }
 
   static getTemplateImagePath(template: TemplateWithDefault): string {
+    let imagePath: string;
+    
     if (template.template_type === 'custom' && template.custom_image_path) {
-      return template.custom_image_path;
+      imagePath = template.custom_image_path;
     } else if (template.default_template?.base_image_path) {
-      return template.default_template.base_image_path;
+      imagePath = template.default_template.base_image_path;
+    } else {
+      throw new Error('Template image path not found');
     }
-    throw new Error('Template image path not found');
+
+    // Convert web path to file system path
+    if (imagePath.startsWith('/public/')) {
+      return path.join(process.cwd(), imagePath.substring(1)); // Remove leading slash
+    }
+    
+    return imagePath;
   }
 
   static getDefaultSettings(defaultTemplate: DefaultTemplate) {

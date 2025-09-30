@@ -38,8 +38,35 @@ export class CertificateService {
         throw new Error('User not found');
       }
 
-      // Get template
-      const template = await TemplateService.getTemplateById(template_id);
+      // Get template - try user template first, then default template
+      let template = await TemplateService.getTemplateById(template_id);
+      let isDefaultTemplate = false;
+      
+      if (!template) {
+        // Try to get default template
+        const defaultTemplate = await TemplateService.getDefaultTemplateById(template_id);
+        if (defaultTemplate) {
+          // Convert default template to template format for processing
+          template = {
+            id: defaultTemplate.id,
+            user_id: userId,
+            template_type: 'default' as const,
+            default_template_id: defaultTemplate.id,
+            custom_image_path: undefined,
+            logo_path: undefined,
+            primary_color: defaultTemplate.default_primary_color,
+            text_x_position: defaultTemplate.default_text_x,
+            text_y_position: defaultTemplate.default_text_y,
+            font_size: defaultTemplate.default_font_size,
+            font_color: defaultTemplate.default_font_color,
+            font_family: 'Arial',
+            created_at: new Date(),
+            default_template: defaultTemplate
+          };
+          isDefaultTemplate = true;
+        }
+      }
+      
       if (!template) {
         throw new Error('Template not found');
       }
@@ -118,7 +145,8 @@ export class CertificateService {
         // Update batch status to failed
         await GenerationBatchQueries.updateStatus(
           batch.id,
-          CONSTANTS.BATCH_STATUS.FAILED
+          CONSTANTS.BATCH_STATUS.FAILED,
+          null
         );
         throw error;
       }
@@ -267,8 +295,33 @@ export class CertificateService {
         throw new Error('User not found');
       }
 
-      // Get template
-      const template = await TemplateService.getTemplateById(templateId);
+      // Get template - try user template first, then default template
+      let template = await TemplateService.getTemplateById(templateId);
+      
+      if (!template) {
+        // Try to get default template
+        const defaultTemplate = await TemplateService.getDefaultTemplateById(templateId);
+        if (defaultTemplate) {
+          // Convert default template to template format for processing
+          template = {
+            id: defaultTemplate.id,
+            user_id: userId,
+            template_type: 'default' as const,
+            default_template_id: defaultTemplate.id,
+            custom_image_path: undefined,
+            logo_path: undefined,
+            primary_color: defaultTemplate.default_primary_color,
+            text_x_position: defaultTemplate.default_text_x,
+            text_y_position: defaultTemplate.default_text_y,
+            font_size: defaultTemplate.default_font_size,
+            font_color: defaultTemplate.default_font_color,
+            font_family: 'Arial',
+            created_at: new Date(),
+            default_template: defaultTemplate
+          };
+        }
+      }
+      
       if (!template) {
         throw new Error('Template not found');
       }

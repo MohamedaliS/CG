@@ -175,14 +175,16 @@ export class GenerationBatchQueries {
     return result.rows[0];
   }
 
-  static async updateStatus(id: string, status: string, filePath?: string) {
+  static async updateStatus(id: string, status: string, filePath?: string | null) {
     const query = `
       UPDATE generation_batches
-      SET status = $2, file_path = $3, completed_at = CASE WHEN $2 = 'completed' THEN CURRENT_TIMESTAMP ELSE completed_at END
+      SET status = $2::varchar, 
+          file_path = $3, 
+          completed_at = CASE WHEN $2::varchar = 'completed' THEN CURRENT_TIMESTAMP ELSE completed_at END
       WHERE id = $1
       RETURNING *
     `;
-    const result = await db.query(query, [id, status, filePath]);
+    const result = await db.query(query, [id, status, filePath || null]);
     return result.rows[0];
   }
 
