@@ -1,0 +1,273 @@
+<div class="max-w-7xl mx-auto py-6 sm:px-6 lg:px-8">
+    <!-- Page header -->
+    <div class="md:flex md:items-center md:justify-between mb-8">
+        <div class="flex-1 min-w-0">
+            <h2 class="text-2xl font-bold leading-7 text-gray-900 sm:text-3xl sm:truncate">
+                My Certificates
+            </h2>
+            <p class="mt-1 text-sm text-gray-500">
+                View and manage all your generated certificates
+            </p>
+        </div>
+        <div class="mt-4 flex md:mt-0 md:ml-4">
+            <button onclick="window.location.href='/templates/select'" 
+                    class="ml-3 inline-flex items-center px-4 py-2 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-blue-600 hover:bg-blue-700">
+                Generate New Certificate
+            </button>
+        </div>
+    </div>
+
+        <!-- Statistics Cards -->
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
+            <div class="bg-white overflow-hidden shadow rounded-lg">
+                <div class="p-5">
+                    <div class="flex items-center">
+                        <div class="flex-shrink-0">
+                            <svg class="h-6 w-6 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+                            </svg>
+                        </div>
+                        <div class="ml-5 w-0 flex-1">
+                            <dl>
+                                <dt class="text-sm font-medium text-gray-500 truncate">Total Certificates</dt>
+                                <dd class="text-lg font-medium text-gray-900" id="total-certificates">Loading...</dd>
+                            </dl>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="bg-white overflow-hidden shadow rounded-lg">
+                <div class="p-5">
+                    <div class="flex items-center">
+                        <div class="flex-shrink-0">
+                            <svg class="h-6 w-6 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+                            </svg>
+                        </div>
+                        <div class="ml-5 w-0 flex-1">
+                            <dl>
+                                <dt class="text-sm font-medium text-gray-500 truncate">Recent Batches</dt>
+                                <dd class="text-lg font-medium text-gray-900" id="recent-batches">Loading...</dd>
+                            </dl>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="bg-white overflow-hidden shadow rounded-lg">
+                <div class="p-5">
+                    <div class="flex items-center">
+                        <div class="flex-shrink-0">
+                            <svg class="h-6 w-6 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M9 19l3 3m0 0l3-3m-3 3V10" />
+                            </svg>
+                        </div>
+                        <div class="ml-5 w-0 flex-1">
+                            <dl>
+                                <dt class="text-sm font-medium text-gray-500 truncate">Available Downloads</dt>
+                                <dd class="text-lg font-medium text-gray-900" id="available-downloads">Loading...</dd>
+                            </dl>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Certificates List -->
+        <div class="bg-white shadow overflow-hidden sm:rounded-md">
+            <div class="px-4 py-5 sm:px-6">
+                <h3 class="text-lg leading-6 font-medium text-gray-900">Certificate Batches</h3>
+                <p class="mt-1 max-w-2xl text-sm text-gray-500">
+                    Your generated certificate batches and individual certificates
+                </p>
+            </div>
+            
+            <!-- Loading State -->
+            <div id="loading-state" class="p-6 text-center">
+                <div class="inline-flex items-center px-4 py-2 font-semibold leading-6 text-sm shadow rounded-md text-gray-500 bg-white">
+                    <svg class="animate-spin -ml-1 mr-3 h-5 w-5 text-gray-500" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                        <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                        <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                    </svg>
+                    Loading certificates...
+                </div>
+            </div>
+
+            <!-- Certificates List -->
+            <ul id="certificates-list" class="divide-y divide-gray-200 hidden">
+                <!-- Certificates will be loaded here -->
+            </ul>
+
+            <!-- Empty State -->
+            <div id="empty-state" class="text-center py-12 hidden">
+                <svg class="mx-auto h-12 w-12 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+                </svg>
+                <h3 class="mt-2 text-sm font-medium text-gray-900">No certificates yet</h3>
+                <p class="mt-1 text-sm text-gray-500">Get started by creating your first certificate.</p>
+                <div class="mt-6">
+                    <button onclick="window.location.href='/templates/select'" 
+                            class="inline-flex items-center px-4 py-2 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-blue-600 hover:bg-blue-700">
+                        Create Certificate
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+document.addEventListener('DOMContentLoaded', async function() {
+    await loadCertificates();
+    await loadStatistics();
+});
+
+async function loadCertificates() {
+    try {
+        const token = localStorage.getItem('auth_token');
+        if (!token) {
+            window.location.href = '/login';
+            return;
+        }
+
+        const response = await fetch('/api/certificates/batches', {
+            headers: {
+                'Authorization': `Bearer ${token}`
+            }
+        });
+
+        if (!response.ok) {
+            throw new Error('Failed to load certificates');
+        }
+
+        const data = await response.json();
+        const batches = data.data || [];
+
+        // Hide loading state
+        document.getElementById('loading-state').classList.add('hidden');
+
+        if (batches.length === 0) {
+            document.getElementById('empty-state').classList.remove('hidden');
+            return;
+        }
+
+        // Show certificates list
+        document.getElementById('certificates-list').classList.remove('hidden');
+        
+        // Populate certificates list
+        const listElement = document.getElementById('certificates-list');
+        listElement.innerHTML = batches.map(batch => `
+            <li class="px-4 py-4 sm:px-6">
+                <div class="flex items-center justify-between">
+                    <div class="flex items-center">
+                        <div class="flex-shrink-0">
+                            <svg class="h-8 w-8 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+                            </svg>
+                        </div>
+                        <div class="ml-4">
+                            <h4 class="text-sm font-medium text-gray-900">${batch.event_name}</h4>
+                            <p class="text-sm text-gray-500">${batch.participant_count} certificates • ${new Date(batch.created_at).toLocaleDateString()}</p>
+                        </div>
+                    </div>
+                    <div class="flex items-center space-x-4">
+                        <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${batch.status === 'completed' ? 'bg-green-100 text-green-800' : batch.status === 'processing' ? 'bg-yellow-100 text-yellow-800' : 'bg-red-100 text-red-800'}">
+                            ${batch.status}
+                        </span>
+                        ${batch.status === 'completed' ? `
+                            <button onclick="downloadBatch('${batch.id}')" 
+                                    class="text-blue-600 hover:text-blue-800 text-sm font-medium">
+                                Download
+                            </button>
+                        ` : ''}
+                    </div>
+                </div>
+            </li>
+        `).join('');
+
+    } catch (error) {
+        console.error('Error loading certificates:', error);
+        document.getElementById('loading-state').innerHTML = `
+            <div class="text-red-600">
+                <p class="text-sm">Failed to load certificates</p>
+                <button onclick="loadCertificates()" class="mt-2 text-blue-600 hover:text-blue-800 text-sm">Retry</button>
+            </div>
+        `;
+    }
+}
+
+async function loadStatistics() {
+    try {
+        const token = localStorage.getItem('auth_token');
+        if (!token) return;
+
+        const response = await fetch('/api/certificates/batches', {
+            headers: {
+                'Authorization': `Bearer ${token}`
+            }
+        });
+
+        if (response.ok) {
+            const data = await response.json();
+            const batches = data.data || [];
+            
+            const totalCertificates = batches.reduce((sum, batch) => sum + (batch.participant_count || 0), 0);
+            const completedBatches = batches.filter(batch => batch.status === 'completed').length;
+            
+            document.getElementById('total-certificates').textContent = totalCertificates;
+            document.getElementById('recent-batches').textContent = batches.length;
+            document.getElementById('available-downloads').textContent = completedBatches;
+        }
+    } catch (error) {
+        console.error('Error loading statistics:', error);
+    }
+}
+
+// Function to download batch with authentication
+async function downloadBatch(batchId) {
+    try {
+        const token = localStorage.getItem('auth_token');
+        if (!token) {
+            alert('Please log in to download certificates');
+            return;
+        }
+
+        const response = await fetch(`/api/certificates/batch/${batchId}/download`, {
+            method: 'GET',
+            headers: {
+                'Authorization': `Bearer ${token}`
+            }
+        });
+
+        if (!response.ok) {
+            throw new Error('Download failed');
+        }
+
+        // Get the filename from the response headers
+        const contentDisposition = response.headers.get('content-disposition');
+        let filename = 'certificates.zip';
+        if (contentDisposition) {
+            const filenameMatch = contentDisposition.match(/filename="(.+)"/);
+            if (filenameMatch) {
+                filename = filenameMatch[1];
+            }
+        }
+
+        // Convert response to blob and download
+        const blob = await response.blob();
+        const url = window.URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.style.display = 'none';
+        a.href = url;
+        a.download = filename;
+        document.body.appendChild(a);
+        a.click();
+        window.URL.revokeObjectURL(url);
+        document.body.removeChild(a);
+    } catch (error) {
+        console.error('Download error:', error);
+        alert('Failed to download certificates');
+    }
+}
+</script>
