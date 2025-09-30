@@ -128,9 +128,9 @@ export const validateGenerateCertificates = validateBody([
 
 export const validateTemplateCustomization = validateBody([
   { field: 'primary_color', required: true, type: 'string', pattern: /^#[0-9A-Fa-f]{6}$/ },
-  { field: 'text_x_position', required: true, type: 'number', min: 0 },
-  { field: 'text_y_position', required: true, type: 'number', min: 0 },
-  { field: 'font_size', required: true, type: 'number', min: 12, max: 200 },
   { field: 'font_color', required: true, type: 'string', pattern: /^#[0-9A-Fa-f]{6}$/ },
   { field: 'font_family', required: true, type: 'string', minLength: 1, maxLength: 50 },
+  { field: 'font_size', required: true, type: 'number', min: 12, max: 200 },
+  { field: 'text_x_position', required: true, type: 'number', min: 0 },
+  { field: 'text_y_position', required: true, type: 'number', min: 0 },
 ]);

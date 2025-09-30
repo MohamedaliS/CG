@@ -74,18 +74,27 @@ export default async function templateRoutes(fastify: FastifyInstance) {
     preHandler: [authenticateToken, validateTemplateCustomization],
     handler: async (request, reply) => {
       try {
-        const customization = request.body as TemplateCustomization & { default_template_id: string };
+        const body = request.body as any;
+        const customization = {
+          primary_color: body.primary_color,
+          font_color: body.font_color,
+          font_family: body.font_family,
+          font_size: Number(body.font_size),
+          text_x_position: Number(body.text_x_position),
+          text_y_position: Number(body.text_y_position),
+        } as TemplateCustomization;
         
-        if (!customization.default_template_id) {
+        const defaultTemplateId = body.baseTemplateId;
+        if (!defaultTemplateId) {
           return reply.status(400).send({
             success: false,
-            error: 'Default template ID is required',
+            error: 'Base template ID is required',
           } as ApiResponse);
         }
 
         const template = await TemplateService.createTemplateFromDefault(
           request.user!.id,
-          customization.default_template_id,
+          defaultTemplateId,
           customization
         );
 
