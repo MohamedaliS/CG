@@ -78,6 +78,39 @@ async function buildApp() {
       });
     });
 
+    // Certificates page (protected)
+    fastify.get('/certificates', {
+      preHandler: [async (request, reply) => {
+        try {
+          // Check for token in Authorization header first
+          const authHeader = request.headers.authorization;
+          let token = authHeader?.startsWith('Bearer ') ? authHeader.substring(7) : null;
+          
+          // If no header token, check cookies
+          if (!token && request.headers.cookie) {
+            const cookies = request.headers.cookie.split(';');
+            const authCookie = cookies.find(c => c.trim().startsWith('auth_token='));
+            token = authCookie ? authCookie.split('=')[1] : null;
+          }
+          
+          if (!token) {
+            return reply.redirect('/login');
+          }
+
+          const decoded = fastify.jwt.verify(token);
+          (request as any).user = decoded;
+        } catch (error) {
+          return reply.redirect('/login');
+        }
+      }],
+      handler: async (request, reply) => {
+        return (reply as any).view('certificates/index', {
+          title: 'My Certificates',
+          user: (request as any).user
+        });
+      }
+    });
+
     // Template selection page (protected)
     fastify.get('/templates/select', {
       preHandler: [async (request, reply) => {
