@@ -1,8 +1,3 @@
-<%- include('../layouts/main', { 
-    title: 'Customize Template',
-    user: user
-}) %>
-
 <div class="max-w-7xl mx-auto py-6 sm:px-6 lg:px-8">
     <!-- Header -->
     <div class="mb-8">
@@ -221,7 +216,7 @@ document.getElementById('customize-form').addEventListener('submit', async funct
     const token = localStorage.getItem('auth_token');
     
     try {
-        const response = await fetch('/api/templates', {
+        const response = await fetch('/api/templates/customize/default', {
             method: 'POST',
             headers: {
                 'Authorization': `Bearer ${token}`

@@ -1,8 +1,3 @@
-<%- include('../layouts/main', { 
-    title: 'Select Template',
-    user: user
-}) %>
-
 <div class="max-w-7xl mx-auto py-6 sm:px-6 lg:px-8">
     <!-- Header -->
     <div class="mb-8">
@@ -164,13 +159,21 @@ document.getElementById('cert-form').addEventListener('submit', async function(e
     const formData = new FormData(e.target);
     const token = localStorage.getItem('auth_token');
     
+    // Construct the request data to match the API
+    const requestData = {
+        template_id: formData.get('templateId'),
+        event_name: formData.get('courseName'),
+        participant_names: [formData.get('recipientName')]
+    };
+    
     try {
-        const response = await fetch('/api/certificates', {
+        const response = await fetch('/api/certificates/generate', {
             method: 'POST',
             headers: {
-                'Authorization': `Bearer ${token}`
+                'Authorization': `Bearer ${token}`,
+                'Content-Type': 'application/json'
             },
-            body: formData
+            body: JSON.stringify(requestData)
         });
         
         const data = await response.json();
