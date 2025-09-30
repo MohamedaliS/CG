@@ -132,10 +132,10 @@
                             <div class="flex items-center space-x-2">
                                 <span class="batch-status ${batch.status}">${batch.status}</span>
                                 ${batch.status === 'completed' ? `
-                                    <a href="/api/certificates/batch/${batch.id}/download" 
+                                    <button onclick="downloadBatch('${batch.id}')" 
                                        class="text-blue-600 hover:text-blue-800 text-sm font-medium">
                                         Download
-                                    </a>
+                                    </button>
                                 ` : ''}
                             </div>
                         </div>
@@ -162,4 +162,51 @@
             }
         }
     });
+
+    // Function to download batch with authentication
+    async function downloadBatch(batchId) {
+        try {
+            const token = localStorage.getItem('token');
+            if (!token) {
+                alert('Please log in to download certificates');
+                return;
+            }
+
+            const response = await fetch(`/api/certificates/batch/${batchId}/download`, {
+                method: 'GET',
+                headers: {
+                    'Authorization': `Bearer ${token}`
+                }
+            });
+
+            if (!response.ok) {
+                throw new Error('Download failed');
+            }
+
+            // Get the filename from the response headers
+            const contentDisposition = response.headers.get('content-disposition');
+            let filename = 'certificates.zip';
+            if (contentDisposition) {
+                const filenameMatch = contentDisposition.match(/filename="(.+)"/);
+                if (filenameMatch) {
+                    filename = filenameMatch[1];
+                }
+            }
+
+            // Convert response to blob and download
+            const blob = await response.blob();
+            const url = window.URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.style.display = 'none';
+            a.href = url;
+            a.download = filename;
+            document.body.appendChild(a);
+            a.click();
+            window.URL.revokeObjectURL(url);
+            document.body.removeChild(a);
+        } catch (error) {
+            console.error('Download error:', error);
+            alert('Failed to download certificates');
+        }
+    }
 </script>
