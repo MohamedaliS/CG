@@ -54,7 +54,10 @@
             const response = JSON.parse(xhr.responseText);
             
             if (xhr.status === 200 && response.success) {
-                // Store JWT token
+                // Store JWT token in cookie for server-side access
+                document.cookie = `auth_token=${response.data.token}; path=/; max-age=86400; secure; samesite=strict`;
+                
+                // Also store in localStorage for API calls
                 localStorage.setItem('auth_token', response.data.token);
                 
                 // Show success message

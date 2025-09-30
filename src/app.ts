@@ -36,8 +36,16 @@ async function buildApp() {
     fastify.get('/dashboard', {
       preHandler: [async (request, reply) => {
         try {
+          // Check for token in Authorization header first
           const authHeader = request.headers.authorization;
-          const token = authHeader?.startsWith('Bearer ') ? authHeader.substring(7) : null;
+          let token = authHeader?.startsWith('Bearer ') ? authHeader.substring(7) : null;
+          
+          // If no header token, check cookies
+          if (!token && request.headers.cookie) {
+            const cookies = request.headers.cookie.split(';');
+            const authCookie = cookies.find(c => c.trim().startsWith('auth_token='));
+            token = authCookie ? authCookie.split('=')[1] : null;
+          }
           
           if (!token) {
             return reply.redirect('/login');

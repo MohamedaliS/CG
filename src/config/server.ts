@@ -1,6 +1,7 @@
 import { FastifyInstance } from 'fastify';
 import fastifyJwt from '@fastify/jwt';
 import fastifyMultipart from '@fastify/multipart';
+import fastifyFormbody from '@fastify/formbody';
 import fastifyStatic from '@fastify/static';
 import fastifyView from '@fastify/view';
 import fastifyCors from '@fastify/cors';
@@ -18,6 +19,9 @@ export const serverConfig = {
 };
 
 export async function registerPlugins(fastify: FastifyInstance) {
+  // Form data support for login/register forms
+  await fastify.register(fastifyFormbody);
+
   // JWT Authentication
   await fastify.register(fastifyJwt, {
     secret: process.env.JWT_SECRET || 'your_jwt_secret_change_this_in_production',
