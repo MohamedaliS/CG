@@ -5,6 +5,51 @@ import fs from 'fs/promises';
 import path from 'path';
 import sharp from 'sharp';
 
+// Enhanced template configuration interface
+interface EnhancedTemplateConfig {
+  template: string;
+  recipientName: string;
+  title: string;
+  subtitle: string;
+  description: string;
+  date: string;
+  signature: string;
+  primaryColor: string;
+  secondaryColor: string;
+  accentColor: string;
+  fontFamily: string;
+  showBadge: boolean;
+  badgeText: string;
+  badgeIcon: string;
+  borderStyle: string;
+  logoText: string;
+  showLogo: boolean;
+  logoPosition: string;
+  logoImage?: string;
+  logoSize: string;
+}
+
+// Certificate session interface
+interface CertificateSession {
+  id: string;
+  user_id: string;
+  session_data: EnhancedTemplateConfig;
+  template_id?: string;
+  created_at: Date;
+  updated_at: Date;
+  expires_at: Date;
+}
+
+// Template preset interface
+interface TemplatePreset {
+  id: string;
+  name: string;
+  category: string;
+  config: Record<string, any>;
+  is_active: boolean;
+  created_at: Date;
+}
+
 export class TemplateService {
   
   static async getDefaultTemplates(): Promise<DefaultTemplate[]> {
@@ -381,6 +426,616 @@ export class TemplateService {
       font_size: defaultTemplate.default_font_size,
       font_color: defaultTemplate.default_font_color,
       font_family: CONSTANTS.DEFAULT_FONT_FAMILY,
+    };
+  }
+
+  // Enhanced certificate builder methods
+  static getTemplatePresets(): TemplatePreset[] {
+    return [
+      {
+        id: 'modern',
+        name: 'Modern Wave',
+        category: 'theme',
+        config: {
+          primaryColor: '#0891b2',
+          secondaryColor: '#fbbf24',
+          accentColor: '#1e293b',
+          borderStyle: 'modern',
+          badgeIcon: 'award',
+          fontFamily: 'serif'
+        },
+        is_active: true,
+        created_at: new Date()
+      },
+      {
+        id: 'elegant',
+        name: 'Elegant Purple',
+        category: 'theme',
+        config: {
+          primaryColor: '#7c3aed',
+          secondaryColor: '#f97316',
+          accentColor: '#1e293b',
+          borderStyle: 'ornate',
+          badgeIcon: 'crown',
+          fontFamily: 'serif'
+        },
+        is_active: true,
+        created_at: new Date()
+      },
+      {
+        id: 'professional',
+        name: 'Professional Blue',
+        category: 'theme',
+        config: {
+          primaryColor: '#0284c7',
+          secondaryColor: '#eab308',
+          accentColor: '#1e293b',
+          borderStyle: 'minimal',
+          badgeIcon: 'shield',
+          fontFamily: 'sans'
+        },
+        is_active: true,
+        created_at: new Date()
+      },
+      {
+        id: 'classic',
+        name: 'Classic Gold',
+        category: 'theme',
+        config: {
+          primaryColor: '#ca8a04',
+          secondaryColor: '#dc2626',
+          accentColor: '#1e293b',
+          borderStyle: 'ornate',
+          badgeIcon: 'trophy',
+          fontFamily: 'serif'
+        },
+        is_active: true,
+        created_at: new Date()
+      },
+      {
+        id: 'bold',
+        name: 'Bold Dark',
+        category: 'theme',
+        config: {
+          primaryColor: '#0d9488',
+          secondaryColor: '#fbbf24',
+          accentColor: '#1e293b',
+          borderStyle: 'modern',
+          badgeIcon: 'star',
+          fontFamily: 'sans'
+        },
+        is_active: true,
+        created_at: new Date()
+      },
+      {
+        id: 'vibrant',
+        name: 'Vibrant Multi',
+        category: 'theme',
+        config: {
+          primaryColor: '#059669',
+          secondaryColor: '#dc2626',
+          accentColor: '#1e293b',
+          borderStyle: 'modern',
+          badgeIcon: 'hexagon',
+          fontFamily: 'sans'
+        },
+        is_active: true,
+        created_at: new Date()
+      }
+    ];
+  }
+
+  static getColorPresets(): TemplatePreset[] {
+    return [
+      {
+        id: 'blue',
+        name: 'Blue Professional',
+        category: 'color',
+        config: {
+          primaryColor: '#3b82f6',
+          secondaryColor: '#1e40af',
+          accentColor: '#1e293b'
+        },
+        is_active: true,
+        created_at: new Date()
+      },
+      {
+        id: 'red',
+        name: 'Red Energy',
+        category: 'color',
+        config: {
+          primaryColor: '#ef4444',
+          secondaryColor: '#dc2626',
+          accentColor: '#1e293b'
+        },
+        is_active: true,
+        created_at: new Date()
+      },
+      {
+        id: 'green',
+        name: 'Green Growth',
+        category: 'color',
+        config: {
+          primaryColor: '#10b981',
+          secondaryColor: '#059669',
+          accentColor: '#1e293b'
+        },
+        is_active: true,
+        created_at: new Date()
+      },
+      {
+        id: 'purple',
+        name: 'Purple Elegance',
+        category: 'color',
+        config: {
+          primaryColor: '#8b5cf6',
+          secondaryColor: '#7c3aed',
+          accentColor: '#1e293b'
+        },
+        is_active: true,
+        created_at: new Date()
+      },
+      {
+        id: 'orange',
+        name: 'Orange Warmth',
+        category: 'color',
+        config: {
+          primaryColor: '#f59e0b',
+          secondaryColor: '#d97706',
+          accentColor: '#1e293b'
+        },
+        is_active: true,
+        created_at: new Date()
+      },
+      {
+        id: 'teal',
+        name: 'Teal Modern',
+        category: 'color',
+        config: {
+          primaryColor: '#14b8a6',
+          secondaryColor: '#0d9488',
+          accentColor: '#1e293b'
+        },
+        is_active: true,
+        created_at: new Date()
+      }
+    ];
+  }
+
+  static getBadgeIcons(): Record<string, { icon: string; label: string }> {
+    return {
+      award: { icon: 'award', label: 'Award' },
+      star: { icon: 'star', label: 'Star' },
+      shield: { icon: 'shield', label: 'Shield' },
+      trophy: { icon: 'trophy', label: 'Trophy' },
+      medal: { icon: 'medal', label: 'Medal' },
+      crown: { icon: 'crown', label: 'Crown' },
+      sparkles: { icon: 'sparkles', label: 'Sparkles' },
+      check: { icon: 'check-circle', label: 'Check' },
+      hexagon: { icon: 'hexagon', label: 'Hexagon' }
+    };
+  }
+
+  static renderCertificateHTML(config: EnhancedTemplateConfig): string {
+    const {
+      template,
+      primaryColor,
+      secondaryColor,
+      accentColor,
+      borderStyle,
+      fontFamily,
+      showBadge,
+      badgeText,
+      badgeIcon,
+      title,
+      subtitle,
+      recipientName,
+      description,
+      date,
+      signature,
+      showLogo,
+      logoText,
+      logoPosition,
+      logoSize,
+      logoImage
+    } = config;
+
+    const borderDesign = this.getBorderDesign(template, borderStyle, primaryColor, secondaryColor, accentColor);
+    const logoComponent = this.getLogoComponent(showLogo, logoImage, logoText, logoPosition, logoSize, primaryColor);
+    const badgeComponent = this.getBadgeComponent(showBadge, badgeIcon, badgeText, secondaryColor);
+
+    return `
+      <div class="certificate-container" style="
+        position: relative;
+        width: 800px;
+        height: 600px;
+        background: white;
+        box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1);
+        overflow: hidden;
+        border-radius: 8px;
+      ">
+        ${borderDesign}
+        ${logoComponent}
+        
+        <div style="
+          position: relative;
+          z-index: 10;
+          height: 100%;
+          display: flex;
+          flex-direction: column;
+          align-items: center;
+          justify-content: center;
+          padding: 64px;
+          text-align: center;
+        ">
+          <div style="margin-bottom: 24px;">
+            <h2 style="
+              font-family: ${fontFamily === 'serif' ? 'Georgia, serif' : 'Arial, sans-serif'};
+              font-size: 14px;
+              letter-spacing: 0.1em;
+              margin-bottom: 8px;
+              text-transform: uppercase;
+              opacity: 0.7;
+              color: ${accentColor};
+            ">${title}</h2>
+            <div style="
+              width: 128px;
+              height: 4px;
+              margin: 0 auto 16px auto;
+              background-color: ${primaryColor};
+            "></div>
+          </div>
+
+          <p style="
+            font-family: ${fontFamily === 'serif' ? 'Georgia, serif' : 'Arial, sans-serif'};
+            font-size: 12px;
+            margin-bottom: 12px;
+            opacity: 0.6;
+            color: ${accentColor};
+          ">${subtitle}</p>
+
+          <h1 style="
+            font-family: ${fontFamily === 'serif' ? 'Brush Script MT, cursive' : 'Arial, sans-serif'};
+            font-size: 48px;
+            margin-bottom: 24px;
+            color: ${accentColor};
+            font-weight: ${fontFamily === 'serif' ? 'normal' : 'bold'};
+          ">${recipientName}</h1>
+
+          <p style="
+            font-family: ${fontFamily === 'serif' ? 'Georgia, serif' : 'Arial, sans-serif'};
+            font-size: 14px;
+            max-width: 500px;
+            margin-bottom: 32px;
+            line-height: 1.6;
+            opacity: 0.7;
+            color: ${accentColor};
+          ">${description}</p>
+
+          <div style="
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-end;
+            width: 100%;
+            max-width: 500px;
+            margin-top: 32px;
+          ">
+            <div style="text-align: left;">
+              <div style="
+                width: 128px;
+                height: 1px;
+                margin-bottom: 8px;
+                background-color: ${accentColor};
+                opacity: 0.3;
+              "></div>
+              <p style="
+                font-size: 10px;
+                opacity: 0.5;
+                color: ${accentColor};
+              ">DATE</p>
+              <p style="
+                font-size: 14px;
+                color: ${accentColor};
+              ">${date}</p>
+            </div>
+            
+            <div style="text-align: right;">
+              <div style="
+                width: 128px;
+                height: 1px;
+                margin-bottom: 8px;
+                margin-left: auto;
+                background-color: ${accentColor};
+                opacity: 0.3;
+              "></div>
+              <p style="
+                font-size: 10px;
+                opacity: 0.5;
+                color: ${accentColor};
+              ">SIGNATURE</p>
+              <p style="
+                font-family: ${fontFamily === 'serif' ? 'Brush Script MT, cursive' : 'Arial, sans-serif'};
+                font-size: 14px;
+                color: ${accentColor};
+              ">${signature}</p>
+            </div>
+          </div>
+        </div>
+
+        ${badgeComponent}
+      </div>
+    `;
+  }
+
+  private static getBorderDesign(template: string, borderStyle: string, primaryColor: string, secondaryColor: string, accentColor: string): string {
+    if (borderStyle === 'modern' && template === 'modern') {
+      return `
+        <div style="
+          position: absolute;
+          top: 0;
+          left: 0;
+          width: 256px;
+          height: 256px;
+          overflow: hidden;
+        ">
+          <div style="
+            position: absolute;
+            top: -128px;
+            left: -128px;
+            width: 384px;
+            height: 384px;
+            border-radius: 50%;
+            opacity: 0.2;
+            background-color: ${primaryColor};
+          "></div>
+        </div>
+        <div style="
+          position: absolute;
+          top: 0;
+          left: 0;
+          width: 8px;
+          height: 100%;
+          background-color: ${primaryColor};
+        "></div>
+        <div style="
+          position: absolute;
+          top: 0;
+          left: 0;
+          bottom: 0;
+          width: 96px;
+          background: linear-gradient(90deg, ${primaryColor}40 0%, transparent 100%);
+        "></div>
+      `;
+    } else if (borderStyle === 'ornate') {
+      return `
+        <div style="
+          position: absolute;
+          top: 16px;
+          left: 16px;
+          right: 16px;
+          bottom: 16px;
+          border: 2px solid ${primaryColor};
+          opacity: 0.3;
+        ">
+          <div style="
+            position: absolute;
+            top: -4px;
+            left: -4px;
+            width: 32px;
+            height: 32px;
+            border-top: 2px solid ${primaryColor};
+            border-left: 2px solid ${primaryColor};
+          "></div>
+          <div style="
+            position: absolute;
+            top: -4px;
+            right: -4px;
+            width: 32px;
+            height: 32px;
+            border-top: 2px solid ${primaryColor};
+            border-right: 2px solid ${primaryColor};
+          "></div>
+          <div style="
+            position: absolute;
+            bottom: -4px;
+            left: -4px;
+            width: 32px;
+            height: 32px;
+            border-bottom: 2px solid ${primaryColor};
+            border-left: 2px solid ${primaryColor};
+          "></div>
+          <div style="
+            position: absolute;
+            bottom: -4px;
+            right: -4px;
+            width: 32px;
+            height: 32px;
+            border-bottom: 2px solid ${primaryColor};
+            border-right: 2px solid ${primaryColor};
+          "></div>
+        </div>
+        <div style="
+          position: absolute;
+          top: 32px;
+          left: 32px;
+          right: 32px;
+          bottom: 32px;
+          border: 1px solid ${secondaryColor};
+          opacity: 0.2;
+        "></div>
+      `;
+    }
+    return '';
+  }
+
+  private static getLogoComponent(showLogo: boolean, logoImage: string | undefined, logoText: string, logoPosition: string, logoSize: string, primaryColor: string): string {
+    if (!showLogo) return '';
+
+    const logoPositions: Record<string, string> = {
+      'top-left': 'top: 24px; left: 24px;',
+      'top-center': 'top: 24px; left: 50%; transform: translateX(-50%);',
+      'top-right': 'top: 24px; right: 24px;'
+    };
+
+    const logoSizes: Record<string, { width: string; height: string }> = {
+      small: { width: '48px', height: '48px' },
+      medium: { width: '64px', height: '64px' },
+      large: { width: '80px', height: '80px' }
+    };
+
+    const sizeClasses = logoSizes[logoSize] || logoSizes.medium;
+
+    if (logoImage) {
+      return `
+        <div style="
+          position: absolute;
+          ${logoPositions[logoPosition] || logoPositions['top-left']}
+          z-index: 20;
+          display: flex;
+          flex-direction: column;
+          align-items: center;
+        ">
+          <div style="
+            ${sizeClasses.width && sizeClasses.height ? `width: ${sizeClasses.width}; height: ${sizeClasses.height};` : ''}
+            border-radius: 8px;
+            overflow: hidden;
+            background: white;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+            border: 2px solid white;
+          ">
+            <img src="${logoImage}" alt="Logo" style="
+              width: 100%;
+              height: 100%;
+              object-fit: contain;
+            "/>
+          </div>
+          ${logoText ? `
+          <div style="
+            margin-top: 8px;
+            font-size: 10px;
+            font-weight: 600;
+            color: ${primaryColor};
+          ">${logoText}</div>
+          ` : ''}
+        </div>
+      `;
+    } else {
+      return `
+        <div style="
+          position: absolute;
+          ${logoPositions[logoPosition] || logoPositions['top-left']}
+          z-index: 20;
+          display: flex;
+          flex-direction: column;
+          align-items: center;
+        ">
+          <div style="
+            ${sizeClasses.width && sizeClasses.height ? `width: ${sizeClasses.width}; height: ${sizeClasses.height};` : ''}
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border: 4px solid white;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+            background-color: ${primaryColor};
+          ">
+            <span style="
+              color: white;
+              font-weight: bold;
+              font-size: 18px;
+            ">${logoText.slice(0, 2)}</span>
+          </div>
+          <div style="
+            margin-top: 8px;
+            font-size: 10px;
+            font-weight: 600;
+            color: ${primaryColor};
+          ">${logoText}</div>
+        </div>
+      `;
+    }
+  }
+
+  private static getBadgeComponent(showBadge: boolean, badgeIcon: string, badgeText: string, secondaryColor: string): string {
+    if (!showBadge) return '';
+
+    // Simple icon representation
+    const iconSymbols: Record<string, string> = {
+      award: '🏆',
+      star: '⭐',
+      shield: '🛡️',
+      trophy: '🏆',
+      medal: '🥇',
+      crown: '👑',
+      sparkles: '✨',
+      'check-circle': '✅',
+      hexagon: '⬡'
+    };
+
+    const iconSymbol = iconSymbols[badgeIcon] || '🏆';
+
+    return `
+      <div style="
+        position: absolute;
+        bottom: 32px;
+        left: 50%;
+        transform: translateX(-50%);
+      ">
+        <div style="position: relative;">
+          <div style="
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+            border: 4px solid white;
+            background-color: ${secondaryColor};
+            font-size: 32px;
+          ">${iconSymbol}</div>
+          <div style="
+            position: absolute;
+            bottom: -24px;
+            left: 50%;
+            transform: translateX(-50%);
+            white-space: nowrap;
+          ">
+            <div style="
+              padding: 4px 12px;
+              font-size: 10px;
+              font-weight: bold;
+              color: white;
+              border-radius: 4px;
+              background-color: ${secondaryColor};
+            ">${badgeText}</div>
+          </div>
+        </div>
+      </div>
+    `;
+  }
+
+  static getDefaultConfig(): EnhancedTemplateConfig {
+    return {
+      template: 'modern',
+      recipientName: 'John Doe',
+      title: 'Certificate of Achievement',
+      subtitle: 'This certificate is proudly presented to',
+      description: 'For outstanding performance and dedication in completing the advanced training program with exceptional results.',
+      date: new Date().toLocaleDateString(),
+      signature: 'Director Signature',
+      primaryColor: '#0891b2',
+      secondaryColor: '#fbbf24',
+      accentColor: '#1e293b',
+      fontFamily: 'serif',
+      showBadge: true,
+      badgeText: 'AWARD',
+      badgeIcon: 'award',
+      borderStyle: 'modern',
+      logoText: 'COMPANY',
+      showLogo: true,
+      logoPosition: 'top-left',
+      logoSize: 'medium'
     };
   }
 }

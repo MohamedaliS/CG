@@ -8,6 +8,7 @@ import authRoutes from './routes/auth';
 import templateRoutes from './routes/templates';
 import certificateRoutes from './routes/certificates';
 import verificationRoutes from './routes/verification';
+import enhancedTemplateRoutes from './routes/enhancedTemplates';
 
 // Initialize Fastify
 const fastify = Fastify(serverConfig);
@@ -29,6 +30,7 @@ async function buildApp() {
     // Register routes
     await fastify.register(authRoutes, { prefix: '/api/auth' });
     await fastify.register(templateRoutes, { prefix: '/api' });
+    await fastify.register(enhancedTemplateRoutes, { prefix: '/api' });
     await fastify.register(certificateRoutes, { prefix: '/api' });
     await fastify.register(verificationRoutes);
 
@@ -218,6 +220,54 @@ async function buildApp() {
           user: (request as any).user,
           selectedTemplate
         });
+      }
+    });
+
+    // Enhanced Certificate Builder page (protected)
+    fastify.get('/templates/builder', {
+      preHandler: [async (request, reply) => {
+        try {
+          // Check for token in Authorization header first
+          const authHeader = request.headers.authorization;
+          let token = authHeader?.startsWith('Bearer ') ? authHeader.substring(7) : null;
+          
+          // If no header token, check cookies
+          if (!token && request.headers.cookie) {
+            const cookies = request.headers.cookie.split(';');
+            const authCookie = cookies.find(c => c.trim().startsWith('auth_token='));
+            token = authCookie ? authCookie.split('=')[1] : null;
+          }
+          
+          if (!token) {
+            return reply.redirect('/login');
+          }
+
+          const decoded = fastify.jwt.verify(token);
+          (request as any).user = decoded;
+        } catch (error) {
+          return reply.redirect('/login');
+        }
+      }],
+      handler: async (request, reply) => {
+        try {
+          const { TemplateService } = await import('./services/templateService');
+          const templatePresets = TemplateService.getTemplatePresets();
+          const colorPresets = TemplateService.getColorPresets();
+          const badgeIcons = TemplateService.getBadgeIcons();
+          const defaultConfig = TemplateService.getDefaultConfig();
+
+          return (reply as any).view('templates/enhanced-builder', {
+            title: 'Certificate Builder',
+            templatePresets,
+            colorPresets,
+            badgeIcons,
+            defaultConfig,
+            user: (request as any).user
+          });
+        } catch (error) {
+          fastify.log.error('Error loading certificate builder:', error);
+          return reply.status(500).send('Internal Server Error');
+        }
       }
     });
 

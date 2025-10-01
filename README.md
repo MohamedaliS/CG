@@ -6,7 +6,10 @@ A full-stack certificate generation platform with verification system built with
 
 ### Core Functionality
 - **User Authentication** - JWT-based auth with registration and login
-- **Template Management** - 3 default templates (Modern, Classic, Minimalist) + custom uploads
+- **Enhanced Certificate Builder** - Modern UI with React-inspired design and HTMX interactivity
+- **Template Management** - 6 professional templates (Academic, Corporate, Modern, Classic, Minimalist, Bronze/Silver/Golden) + custom uploads
+- **Live Preview** - Real-time certificate preview with HTMX updates
+- **Advanced Customization** - Color pickers, logo upload, badge system, font selection
 - **Certificate Generation** - Individual and batch processing from CSV files
 - **QR Code Integration** - Automatic QR codes for certificate verification
 - **PDF Generation** - High-quality PDF certificates using Puppeteer
@@ -83,6 +86,7 @@ npm start
 
 ### 7. Access the application
 - **Main App**: http://localhost:3000
+- **🎨 Enhanced Certificate Builder**: http://localhost:3000/templates/builder
 - **Health Check**: http://localhost:3000/health
 - **Verification Portal**: http://localhost:3000/verify
 
@@ -111,9 +115,14 @@ certificate-generator/
 ### Creating Certificates
 
 1. **Register/Login** at `/register` or `/login`
-2. **Choose Template** - Select from default templates or upload custom
-3. **Customize** - Adjust colors, fonts, positioning
-4. **Generate** - Create individual certificates or upload CSV for batch
+2. **Enhanced Certificate Builder** - Visit `/templates/builder` for the modern certificate builder
+3. **Choose Template** - Select from 6 professional presets or customize your own
+4. **Live Customization** - Real-time preview with:
+   - Color picker system (primary, secondary, accent colors)
+   - Logo upload and positioning
+   - Badge system with icon selection
+   - Font family and border style options
+5. **Generate** - Create individual certificates or upload CSV for batch processing
 
 ### Batch Processing
 
@@ -155,6 +164,10 @@ Test with provided:
 - `GET /api/templates` - List user templates
 - `POST /api/templates` - Create template
 - `PUT /api/templates/:id` - Update template
+- `GET /templates/builder` - Enhanced certificate builder UI
+- `POST /api/templates/builder/preview` - Live preview updates (HTMX)
+- `POST /api/templates/builder/apply-preset` - Apply template presets
+- `POST /api/templates/builder/upload-logo` - Logo upload handling
 
 ### Certificates
 - `POST /api/certificates` - Generate certificate
