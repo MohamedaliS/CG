@@ -1,0 +1,402 @@
+<div class="max-w-7xl mx-auto py-2 sm:px-6 lg:px-8">
+    <!-- Certificate Builder Header -->
+    <div class="text-center mb-4">
+        <h1 class="text-2xl font-bold text-gray-900 mb-1">Certificate Builder</h1>
+        <p class="text-gray-600 text-xs">Design and customize professional certificates with live preview</p>
+    </div>
+
+    <div class="grid grid-cols-1 lg:grid-cols-3 gap-3">
+        <!-- Controls Panel -->
+        <div class="lg:col-span-1 space-y-2 overflow-y-auto max-h-[calc(100vh-120px)]">
+            
+            <!-- Templates -->
+            <div class="bg-white rounded-lg shadow-md p-2">
+                <div class="flex items-center gap-1 mb-2">
+                    <svg class="w-3 h-3 text-cyan-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 21a4 4 0 01-4-4V5a2 2 0 012-2h4a2 2 0 012 2v12a4 4 0 01-4 4zm0 0h12a2 2 0 002-2v-4a2 2 0 00-2-2h-2.343M11 7.343l1.657-1.657a2 2 0 012.828 0l2.829 2.829a2 2 0 010 2.828l-8.486 8.485M7 17h.01"></path>
+                    </svg>
+                    <h3 class="font-semibold text-gray-800 text-xs">Templates</h3>
+                </div>
+                <div class="grid grid-cols-2 gap-1">
+                    <button onclick="applyTemplate('modern')" class="template-btn text-xs font-medium transition-all duration-300" data-template="modern">
+                        Modern
+                    </button>
+                    <button onclick="applyTemplate('elegant')" class="template-btn text-xs font-medium transition-all duration-300" data-template="elegant">
+                        Elegant
+                    </button>
+                    <button onclick="applyTemplate('professional')" class="template-btn text-xs font-medium transition-all duration-300" data-template="professional">
+                        Professional
+                    </button>
+                    <button onclick="applyTemplate('classic')" class="template-btn text-xs font-medium transition-all duration-300" data-template="classic">
+                        Classic
+                    </button>
+                    <button onclick="applyTemplate('bold')" class="template-btn text-xs font-medium transition-all duration-300" data-template="bold">
+                        Bold
+                    </button>
+                    <button onclick="applyTemplate('vibrant')" class="template-btn text-xs font-medium transition-all duration-300" data-template="vibrant">
+                        Vibrant
+                    </button>
+                    <button onclick="applyTemplate('luxury')" class="template-btn text-xs font-medium transition-all duration-300" data-template="luxury">
+                        Luxury
+                    </button>
+                    <button onclick="applyTemplate('sunset')" class="template-btn text-xs font-medium transition-all duration-300" data-template="sunset">
+                        Sunset
+                    </button>
+                </div>
+            </div>
+
+            <!-- Logo Upload -->
+            <div class="bg-white rounded-lg shadow-md p-2">
+                <div class="flex items-center gap-1 mb-2">
+                    <svg class="w-3 h-3 text-indigo-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"></path>
+                    </svg>
+                    <h3 class="font-semibold text-gray-800 text-xs">Logo</h3>
+                </div>
+                <div class="space-y-1">
+                    <div id="logoPreview" class="hidden w-full h-12 border-2 border-dashed border-gray-300 rounded-lg flex items-center justify-center">
+                        <img id="logoImage" src="" alt="Logo Preview" class="max-h-10 max-w-full object-contain">
+                    </div>
+                    <div class="flex items-center justify-center w-full">
+                        <label for="logoUpload" class="flex flex-col items-center justify-center w-full h-12 border-2 border-gray-300 border-dashed rounded-lg cursor-pointer bg-gray-50 hover:bg-gray-100">
+                            <div class="flex items-center justify-center">
+                                <svg class="w-4 h-4 mr-1 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12"></path>
+                                </svg>
+                                <p class="text-xs text-gray-500">Upload</p>
+                            </div>
+                            <input id="logoUpload" type="file" class="hidden" accept="image/*" onchange="handleLogoUpload(event)">
+                        </label>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Content Controls -->
+            <div class="bg-white rounded-lg shadow-md p-2">
+                <div class="flex items-center gap-1 mb-2">
+                    <svg class="w-3 h-3 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"></path>
+                    </svg>
+                    <h3 class="font-semibold text-gray-800 text-xs">Content</h3>
+                </div>
+                <div class="space-y-1">
+                    <div>
+                        <label class="block text-xs font-medium text-gray-700 mb-1">Recipient</label>
+                        <input type="text" id="recipientName" value="John Doe" class="w-full p-1 text-xs border rounded focus:outline-none focus:ring-1 focus:ring-cyan-500" onchange="updatePreview()">
+                    </div>
+                    <div>
+                        <label class="block text-xs font-medium text-gray-700 mb-1">Title</label>
+                        <input type="text" id="certificateTitle" value="Certificate of Achievement" class="w-full p-1 text-xs border rounded focus:outline-none focus:ring-1 focus:ring-cyan-500" onchange="updatePreview()">
+                    </div>
+                    <div>
+                        <label class="block text-xs font-medium text-gray-700 mb-1">Description</label>
+                        <textarea id="description" rows="2" class="w-full p-1 text-xs border rounded focus:outline-none focus:ring-1 focus:ring-cyan-500" onchange="updatePreview()">For outstanding performance and dedication in completing the advanced training program with exceptional results.</textarea>
+                    </div>
+                    <div class="grid grid-cols-2 gap-1">
+                        <div>
+                            <label class="block text-xs font-medium text-gray-700 mb-1">Date</label>
+                            <input type="date" id="certificateDate" class="w-full p-1 text-xs border rounded focus:outline-none focus:ring-1 focus:ring-cyan-500" onchange="updatePreview()">
+                        </div>
+                        <div>
+                            <label class="block text-xs font-medium text-gray-700 mb-1">Signature</label>
+                            <input type="text" id="signature" value="Director Signature" class="w-full p-1 text-xs border rounded focus:outline-none focus:ring-1 focus:ring-cyan-500" onchange="updatePreview()">
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Colors & Styling -->
+            <div class="bg-white rounded-lg shadow-md p-2">
+                <div class="flex items-center gap-1 mb-2">
+                    <svg class="w-3 h-3 text-pink-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 21a4 4 0 01-4-4V5a2 2 0 012-2h4a2 2 0 012 2v12a4 4 0 01-4 4zm0 0h12a2 2 0 002-2v-4a2 2 0 00-2-2h-2.343M11 7.343l1.657-1.657a2 2 0 012.828 0l2.829 2.829a2 2 0 010 2.828l-8.486 8.485M7 17h.01"></path>
+                    </svg>
+                    <h3 class="font-semibold text-gray-800 text-xs">Colors</h3>
+                </div>
+                <div class="space-y-1">
+                    <div class="grid grid-cols-2 gap-1">
+                        <div>
+                            <label class="block text-xs font-medium text-gray-700 mb-1">Primary</label>
+                            <input type="color" id="primaryColor" value="#0891b2" class="w-full h-6 rounded border cursor-pointer" onchange="updatePreview()">
+                        </div>
+                        <div>
+                            <label class="block text-xs font-medium text-gray-700 mb-1">Secondary</label>
+                            <input type="color" id="secondaryColor" value="#fbbf24" class="w-full h-6 rounded border cursor-pointer" onchange="updatePreview()">
+                        </div>
+                    </div>
+                    <div>
+                        <label class="block text-xs font-medium text-gray-700 mb-1">Font</label>
+                        <select id="fontFamily" class="w-full p-1 text-xs border rounded focus:outline-none focus:ring-1 focus:ring-cyan-500" onchange="updatePreview()">
+                            <option value="serif">Serif</option>
+                            <option value="sans">Sans Serif</option>
+                            <option value="monospace">Monospace</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Actions -->
+            <div class="bg-white rounded-lg shadow-md p-2">
+                <div class="space-y-1">
+                    <button onclick="downloadCertificate()" class="w-full bg-red-600 hover:bg-red-700 text-white font-medium py-2 px-4 rounded transition duration-150 ease-in-out text-sm">
+                        Download PDF
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Certificate Preview -->
+        <div class="lg:col-span-2">
+            <div class="bg-white rounded-lg shadow-md p-3 sticky top-2">
+                <div class="flex items-center justify-between mb-2">
+                    <h2 class="text-base font-semibold text-gray-800">Live Preview</h2>
+                </div>
+                <div id="previewContainer" class="border border-gray-200 rounded-lg overflow-hidden bg-gray-50">
+                    <div id="certificatePreview" class="min-h-[450px] flex items-center justify-center">
+                        <div class="text-gray-500">Loading preview...</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+// Certificate Builder JavaScript
+let currentConfig = {
+    template: 'modern',
+    recipientName: 'John Doe',
+    title: 'Certificate of Achievement',
+    description: 'For outstanding performance and dedication in completing the advanced training program with exceptional results.',
+    date: new Date().toLocaleDateString(),
+    signature: 'Director Signature',
+    primaryColor: '#0891b2',
+    secondaryColor: '#fbbf24',
+    fontFamily: 'serif',
+    logoUrl: null
+};
+
+// Initialize
+document.addEventListener('DOMContentLoaded', function() {
+    // Set today's date
+    document.getElementById('certificateDate').value = new Date().toISOString().split('T')[0];
+    updatePreview();
+    
+    // Set default active template
+    applyTemplate('modern');
+});
+
+function applyTemplate(template) {
+    currentConfig.template = template;
+    
+    // Template color schemes
+    const templates = {
+        modern: { primary: '#0891b2', secondary: '#fbbf24' },
+        elegant: { primary: '#7c3aed', secondary: '#f97316' },
+        professional: { primary: '#0284c7', secondary: '#eab308' },
+        classic: { primary: '#ca8a04', secondary: '#dc2626' },
+        bold: { primary: '#0d9488', secondary: '#fbbf24' },
+        vibrant: { primary: '#059669', secondary: '#dc2626' },
+        luxury: { primary: '#1e1b4b', secondary: '#fbbf24' },
+        sunset: { primary: '#ea580c', secondary: '#dc2626' }
+    };
+    
+    if (templates[template]) {
+        currentConfig.primaryColor = templates[template].primary;
+        currentConfig.secondaryColor = templates[template].secondary;
+        
+        // Update UI
+        document.getElementById('primaryColor').value = templates[template].primary;
+        document.getElementById('secondaryColor').value = templates[template].secondary;
+    }
+    
+    // Update button states
+    document.querySelectorAll('.template-btn').forEach(btn => {
+        if (btn.dataset.template === template) {
+            btn.classList.add('active');
+        } else {
+            btn.classList.remove('active');
+        }
+    });
+    
+    updatePreview();
+}
+
+function handleLogoUpload(event) {
+    const file = event.target.files[0];
+    if (file) {
+        // Check file size (limit to 5MB)
+        if (file.size > 5 * 1024 * 1024) {
+            alert('Please select an image smaller than 5MB');
+            return;
+        }
+        
+        const reader = new FileReader();
+        reader.onload = function(e) {
+            // Create an image element to resize it
+            const img = new Image();
+            img.onload = function() {
+                // Create canvas for resizing
+                const canvas = document.createElement('canvas');
+                const ctx = canvas.getContext('2d');
+                
+                // Calculate new dimensions (max 300x300)
+                let { width, height } = img;
+                const maxSize = 300;
+                
+                if (width > height) {
+                    if (width > maxSize) {
+                        height = (height * maxSize) / width;
+                        width = maxSize;
+                    }
+                } else {
+                    if (height > maxSize) {
+                        width = (width * maxSize) / height;
+                        height = maxSize;
+                    }
+                }
+                
+                // Set canvas size and draw resized image
+                canvas.width = width;
+                canvas.height = height;
+                ctx.drawImage(img, 0, 0, width, height);
+                
+                // Convert to base64 with compression
+                const compressedDataUrl = canvas.toDataURL('image/jpeg', 0.8); // 80% quality
+                
+                currentConfig.logoUrl = compressedDataUrl;
+                
+                document.getElementById('logoImage').src = compressedDataUrl;
+                document.getElementById('logoPreview').classList.remove('hidden');
+                
+                updatePreview();
+            };
+            img.src = e.target.result;
+        };
+        reader.readAsDataURL(file);
+    }
+}
+
+function updatePreview() {
+    // Update config from form inputs
+    currentConfig.recipientName = document.getElementById('recipientName').value;
+    currentConfig.title = document.getElementById('certificateTitle').value;
+    currentConfig.description = document.getElementById('description').value;
+    currentConfig.date = new Date(document.getElementById('certificateDate').value).toLocaleDateString();
+    currentConfig.signature = document.getElementById('signature').value;
+    currentConfig.primaryColor = document.getElementById('primaryColor').value;
+    currentConfig.secondaryColor = document.getElementById('secondaryColor').value;
+    currentConfig.fontFamily = document.getElementById('fontFamily').value;
+    
+    // Generate preview HTML (simplified version)
+    const previewHTML = generateCertificateHTML(currentConfig);
+    document.getElementById('certificatePreview').innerHTML = previewHTML;
+}
+
+function generateCertificateHTML(config) {
+    return `
+        <div style="
+            width: 100%;
+            max-width: 800px;
+            height: 600px;
+            background: linear-gradient(135deg, ${config.primaryColor}15, ${config.secondaryColor}15);
+            border: 3px solid ${config.primaryColor};
+            padding: 40px;
+            font-family: ${config.fontFamily};
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            position: relative;
+            margin: 0 auto;
+        ">
+            ${config.logoUrl ? `<img src="${config.logoUrl}" style="position: absolute; top: 20px; left: 20px; max-height: 60px; max-width: 120px;">` : ''}
+            <h1 style="color: ${config.primaryColor}; font-size: 3rem; margin-bottom: 1rem; font-weight: bold;">${config.title}</h1>
+            <p style="font-size: 1.2rem; margin-bottom: 2rem; color: #666;">This certificate is proudly presented to</p>
+            <h2 style="color: ${config.secondaryColor}; font-size: 2.5rem; margin-bottom: 2rem; border-bottom: 2px solid ${config.secondaryColor}; padding-bottom: 0.5rem;">${config.recipientName}</h2>
+            <p style="font-size: 1.1rem; line-height: 1.6; margin-bottom: 2rem; max-width: 600px; color: #555;">${config.description}</p>
+            <div style="display: flex; justify-content: space-between; width: 100%; margin-top: auto;">
+                <div style="text-align: left;">
+                    <p style="margin: 0; color: #666;">Date: ${config.date}</p>
+                </div>
+                <div style="text-align: right;">
+                    <p style="margin: 0; color: #666; border-top: 1px solid #666; padding-top: 0.5rem;">${config.signature}</p>
+                </div>
+            </div>
+        </div>
+    `;
+}
+
+function downloadCertificate() {
+    // Show loading state
+    const downloadBtn = document.querySelector('button[onclick="downloadCertificate()"]');
+    const originalText = downloadBtn.textContent;
+    downloadBtn.textContent = 'Generating PDF...';
+    downloadBtn.disabled = true;
+    
+    console.log('Starting PDF download with config:', currentConfig);
+    
+    // Make API call to download PDF (cookies will be sent automatically)
+    fetch('/api/builder/download', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        credentials: 'include', // This ensures cookies are sent
+        body: JSON.stringify(currentConfig)
+    })
+    .then(response => {
+        console.log('Response status:', response.status);
+        console.log('Response headers:', response.headers);
+        
+        if (!response.ok) {
+            return response.text().then(text => {
+                console.error('Error response:', text);
+                throw new Error(`HTTP ${response.status}: ${text}`);
+            });
+        }
+        return response.blob();
+    })
+    .then(blob => {
+        console.log('Received blob, size:', blob.size);
+        
+        // Create download link
+        const url = window.URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.style.display = 'none';
+        a.href = url;
+        
+        // Generate filename
+        const filename = `${currentConfig.recipientName || 'Certificate'}_${currentConfig.title || 'Certificate'}.pdf`.replace(/[^a-z0-9]/gi, '_');
+        a.download = filename;
+        
+        document.body.appendChild(a);
+        a.click();
+        window.URL.revokeObjectURL(url);
+        document.body.removeChild(a);
+        
+        console.log('Download initiated');
+        
+        // Reset button
+        downloadBtn.textContent = originalText;
+        downloadBtn.disabled = false;
+    })
+    .catch(error => {
+        console.error('Error downloading certificate:', error);
+        alert('Failed to download certificate: ' + error.message);
+        
+        // Reset button
+        downloadBtn.textContent = originalText;
+        downloadBtn.disabled = false;
+    });
+}
+
+// Helper function to get cookie value
+function getCookieValue(name) {
+    const value = `; ${document.cookie}`;
+    const parts = value.split(`; ${name}=`);
+    if (parts.length === 2) return parts.pop().split(';').shift();
+    return null;
+}
+</script>

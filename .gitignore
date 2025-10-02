@@ -6,3 +6,25 @@ uploads/
 certificates/
 .DS_Store
 *.zip
+
+# Test files
+test_*.pdf
+*.test.pdf
+test-*.csv
+cookies.txt
+
+# Temporary files
+*.tmp
+*.temp
+*.bak
+*.backup
+
+# Editor files
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# OS files
+Thumbs.db
+.DS_Store

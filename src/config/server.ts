@@ -16,6 +16,7 @@ export const serverConfig = {
     } : undefined,
   },
   disableRequestLogging: process.env.NODE_ENV === 'production',
+  bodyLimit: 50 * 1024 * 1024, // 50MB for large logo images in base64
 };
 
 export async function registerPlugins(fastify: FastifyInstance) {
@@ -30,7 +31,9 @@ export async function registerPlugins(fastify: FastifyInstance) {
   // Multipart form data (file uploads)
   await fastify.register(fastifyMultipart, {
     limits: {
-      fileSize: 10 * 1024 * 1024, // 10MB
+      fileSize: 50 * 1024 * 1024, // 50MB to match bodyLimit
+      files: 1,
+      fieldSize: 50 * 1024 * 1024, // 50MB for base64 image data
     },
   });
 

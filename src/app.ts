@@ -2,7 +2,7 @@ import Fastify from 'fastify';
 import { config } from './config/database';
 import { serverConfig, registerPlugins } from './config/server';
 import { errorHandler } from './middleware/errorHandler';
-
+import certificateBuilderRoutes from './routes/certificateBuilder';
 // Import routes
 import authRoutes from './routes/auth';
 import templateRoutes from './routes/templates';
@@ -31,6 +31,7 @@ async function buildApp() {
     await fastify.register(authRoutes, { prefix: '/api/auth' });
     await fastify.register(templateRoutes, { prefix: '/api' });
     await fastify.register(enhancedTemplateRoutes, { prefix: '/api' });
+    await fastify.register(certificateBuilderRoutes, { prefix: '/api' });
     await fastify.register(certificateRoutes, { prefix: '/api' });
     await fastify.register(verificationRoutes);
 
@@ -55,7 +56,7 @@ async function buildApp() {
             
             reply.type('image/png').send(previewBuffer);
           } catch (error) {
-            fastify.log.error('Preview generation error:', error);
+            fastify.log.error('Preview generation error: %s', (error as Error).message);
             return reply.status(500).send({
               success: false,
               error: 'Failed to generate preview',
@@ -144,39 +145,6 @@ async function buildApp() {
       }
     });
 
-    // Template selection page (protected)
-    fastify.get('/templates/select', {
-      preHandler: [async (request, reply) => {
-        try {
-          // Check for token in Authorization header first
-          const authHeader = request.headers.authorization;
-          let token = authHeader?.startsWith('Bearer ') ? authHeader.substring(7) : null;
-          
-          // If no header token, check cookies
-          if (!token && request.headers.cookie) {
-            const cookies = request.headers.cookie.split(';');
-            const authCookie = cookies.find(c => c.trim().startsWith('auth_token='));
-            token = authCookie ? authCookie.split('=')[1] : null;
-          }
-          
-          if (!token) {
-            return reply.redirect('/login');
-          }
-
-          const decoded = fastify.jwt.verify(token);
-          (request as any).user = decoded;
-        } catch (error) {
-          return reply.redirect('/login');
-        }
-      }],
-      handler: async (request, reply) => {
-        return (reply as any).view('templates/select', {
-          title: 'Select Template',
-          user: (request as any).user
-        });
-      }
-    });
-
     // Template customization page (protected)
     fastify.get('/templates/customize', {
       preHandler: [async (request, reply) => {
@@ -211,7 +179,7 @@ async function buildApp() {
             const { TemplateService } = await import('./services/templateService');
             selectedTemplate = await TemplateService.getDefaultTemplateById(id);
           } catch (error) {
-            fastify.log.error('Error loading template for customization:', error);
+            fastify.log.error('Error loading template for customization: %s', (error as Error).message);
           }
         }
         
@@ -256,16 +224,12 @@ async function buildApp() {
           const badgeIcons = TemplateService.getBadgeIcons();
           const defaultConfig = TemplateService.getDefaultConfig();
 
-          return (reply as any).view('templates/enhanced-builder', {
+          return (reply as any).view('templates/builder', {
             title: 'Certificate Builder',
-            templatePresets,
-            colorPresets,
-            badgeIcons,
-            defaultConfig,
             user: (request as any).user
           });
         } catch (error) {
-          fastify.log.error('Error loading certificate builder:', error);
+          fastify.log.error('Error loading certificate builder: %s', (error as Error).message);
           return reply.status(500).send('Internal Server Error');
         }
       }
